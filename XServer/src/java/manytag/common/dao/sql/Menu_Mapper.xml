@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.business.dao.entity.mapper.ISearchMenuMapper">
+	<select id="searchMenu" resultType="java.util.HashMap">
+		select *
+		from system_menus
+		where menu_type = 'menu'
+		and url != '*'
+		and url != '#'
+		order by sort_num
+	</select>
+	<select id="searchMenuTree" resultType="java.util.HashMap">
+		select *
+		from system_menus
+		where menu_type = 'menu'
+		order by sort_num
+	</select>
+	<select id="roleMenuSearch" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select m.*
+		from system_menus m, system_role_menus s
+		where s.role_uid = #{role_uid}
+		and s.menus_uid = m.function_id
+		and m.menu_type = 'menu'
+		order by m.sort_num
+	</select>
+	<select id="roleMenuActionSearch" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select a.*
+		from system_menus m, system_menus a, system_role_menus s
+		where s.role_uid = #{role_uid}
+		and s.menus_uid = m.function_id
+		and m.menu_type = 'menu'
+		and m.function_id = a.parent_id
+		and a.menu_type = 'action'
+		order by a.sort_num
+	</select>
+	<select id="getParentMenu" parameterType="java.lang.String" resultType="java.util.HashMap">
+		select m.*
+		from system_menus m
+		where m.menu_type = 'menu'
+		and m.function_id = #{parent_id}
+	</select>
+	<select id="selectUserMenuList" parameterType="java.util.List" resultType="java.util.HashMap">
+		select p.*
+		from system_menus p, system_menus m
+		where
+		(m.menu_type = 'menu'
+		and m.function_id in
+		<foreach collection="userMenuList" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+		and (p.url is NULL or p.url = '')
+		and p.group = m.group
+		and p.menu_type = 'menu'
+		)
+		or
+		(m.menu_type = 'menu'
+		and m.function_id in
+		<foreach collection="userMenuList" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+		and m.function_id = p.function_id
+		)
+		order by p.sort_num
+	</select>
+	<select id="sysMenusearchMenuTree" resultType="java.util.HashMap">
+		select s.function_id,
+		s.name,
+		s.menu_type,
+		s.url as menu_url,
+		s.group_by,
+		s.sort_num,
+		s.parent_id,
+		s.icon,
+		s.memo,
+		s.menu,
+		(select sm.url from system_menus sm where sm.menu_type='action' and sm.parent_id=s.function_id) as menu_action,
+		(select sm.menu from system_menus sm where sm.menu_type='action' and sm.parent_id=s.function_id) as menu_actionid
+		from system_menus s
+		where s.menu_type = 'menu'
+		order by s.sort_num
+	</select>
+	<delete id="sysMenudelete">
+		delete from system_menus
+		where url != '*'
+	</delete>
+</mapper>

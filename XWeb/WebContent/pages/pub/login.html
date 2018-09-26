@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>产品授权 | 登录</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../other/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../other/css/ionicons.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../../plugins/iCheck/square/blue.css">
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body class="hold-transition login-page">
+	<div class="login-box">
+		<div class="login-logo">
+			<a href="#"><b></b>产品授权</a>
+			<div id="messageinfo">
+				<!-- 
+				<div class="alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<h4><i class="icon fa fa-ban"></i> Alert!</h4>用户名密码不正确
+				</div>
+				 -->
+			</div>
+		</div>
+		<div class="login-box-body">
+			<p class="login-box-msg">产品授权系统</p>
+			<form action="../../index.html" method="post">
+				<div class="form-group has-feedback">
+					<input type="text" class="form-control" placeholder="用户名" id="userid">
+					<span class="glyphicon glyphicon-user form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback">
+					<input type="password" class="form-control" placeholder="密码" id="password">
+					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">&nbsp;</div>
+					<div class="col-xs-4">
+						<!-- 
+						<a class="btn btn-primary btn-block btn-flat" href="../../index.html">登录</a>
+						 -->
+						<a class="btn btn-primary btn-block btn-flat" href="javascript:void(0)" onclick="doLogin()">登录</a>
+					</div>
+				</div>
+			</form>
+			<!-- 
+			<a href="#">忘记密码？</a><br>
+			<a href="register.html"	class="text-center">申请新帐户</a>
+			 -->
+		</div>
+	</div>
+	
+	<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<script src="../../plugins/iCheck/icheck.min.js"></script>
+	<script src="../../dist/js/command.js"></script>
+	<script src="../../dist/js/message.js"></script>
+	<script>
+		$(function () {
+			$('#userid').focus();
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_square-blue',
+				increaseArea: '20%' // optional
+			});
+		
+			$('#password').keydown(function(e){
+				if (e.keyCode == 13) {
+					doLogin();
+				}
+			});
+		});
+		
+		function doLogin() {
+			var userid = $('#userid').val();
+			var pass = $('#password').val();
+			var query = {};
+			query.code = userid;
+			query.password = pass;
+			
+			Base.ajax({
+				url: serverSrc + "/login.do?_method=login",
+				type: "post",
+				dataType: "json",
+				data: {
+					_json: JSON.stringify(query)
+				},
+				mysuccess: function(response) {
+					if (response && response.message) {
+						var msgInfo = response.message;
+						if (msgInfo.messageType == "ERROR") {
+							var msg = "<div class='alert alert-danger alert-dismissable'>"
+								+ "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
+								+ "<h4><i class='icon fa fa-ban'></i> Alert!</h4>" + msgInfo.message + "</div>";
+							$('#messageinfo').html(msg);
+						} else if (msgInfo.messageId == "I0000") {
+							//登录成功。跳转到index页面
+							window.location.href = "../../index.html";
+						}
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>

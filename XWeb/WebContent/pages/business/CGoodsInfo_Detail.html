@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../other/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../other/css/ionicons.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="../../dist/css/yu.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>商品信息</h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-dashboard"></i>首页</a></li>
+					<li><a href="#">详细数据</a></li>
+					<li><a href="#">商品信息</a></li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-md-9">
+						<div class="nav-tabs-custom">
+							<div class="tab-content">
+								<div class="active tab-pane" id="settings">
+									<form id="form" class="form-horizontal">
+										<div class="form-group hide">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>UID</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="uid" name="uid" placeholder="UID">
+											</div>
+											<label for="uid" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>商品编号</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="goodsNum" name="goodsNum" placeholder="商品编号">
+											</div>
+											<label for="goodsNum" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>商品名称</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="goodsName" name="goodsName" placeholder="商品名称">
+											</div>
+											<label for="goodsName" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>主分类</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_type1" name="data_type1" placeholder="主分类">
+												<select class="form-control select2" id="type1" name="type1" placeholder="主分类" style="width: 100%;"></select>
+											</div>
+											<label for="type1" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>二级分类</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_type2" name="data_type2" placeholder="二级分类">
+												<select class="form-control select2" id="type2" name="type2" placeholder="二级分类" style="width: 100%;"></select>
+											</div>
+											<label for="type2" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>三级分类</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_type3" name="data_type3" placeholder="三级分类">
+												<select class="form-control select2" id="type3" name="type3" placeholder="三级分类" style="width: 100%;"></select>
+											</div>
+											<label for="type3" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>零售价</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="price" name="price" placeholder="零售价">
+											</div>
+											<label for="price" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">促销价</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="discountPrice" name="discountPrice" placeholder="促销价">
+											</div>
+											<label for="discountPrice" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">商品条码</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="barcode" name="barcode" placeholder="商品条码">
+											</div>
+											<label for="barcode" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">厂商</label>
+											<div class="col-sm-8">
+												<div class="form-group ">
+													<div class="col-sm-10">
+														<input type="text" class="form-control hide" id="manufacturer" name="manufacturer" placeholder="厂商">
+														<input disabled="disabled" type="text" class="form-control" id="manufacturerStr" name="manufacturerStr">
+													</div>
+													<div class="col-sm-2">
+														<a href="#popup_content" data-toggle="modal" class="btn btn-primary btn-large" onclick='popupShow("CManufacturerInfo","CManufacturerInfo.html", manufacturerPopupCallback);'>参照</a>
+													</div>
+												</div>
+											</div>
+											<label for="manufacturer" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>商品图片</label>
+											<div class="col-sm-8">
+												<div class="tiant">
+													<div id="imagesUid_preview0" onclick="xian(this)" class="yi">
+														<img id="imagesUid_imghead0" border="0" src=""/>
+														<input type="file" name="imagesUid" onchange="previewImage(this,0);addimgfile(this,0);"/>
+													</div>
+													<div id="imagesUid" class="add"></div>
+												</div>
+											</div>
+											<label for="imagesUid" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">厂商授权书</label>
+											<div class="col-sm-8">
+												<div class="tiant">
+													<div id="licenseFileUid_preview0" onclick="xian(this)" class="yi">
+														<img id="licenseFileUid_imghead0" border="0" src=""/>
+														<input type="file" name="licenseFileUid" onchange="previewImage(this,0);addimgfile(this,0);"/>
+													</div>
+													<div id="licenseFileUid" class="add"></div>
+												</div>
+											</div>
+											<label for="licenseFileUid" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">毛重</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="weight" name="weight" placeholder="毛重">
+											</div>
+											<label for="weight" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">产地</label>
+											<div class="col-sm-8">
+												<div class="radio" id="madeIn"></div>
+											</div>
+											<label for="madeIn" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">生产日期</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="madeDateStr" name="madeDateStr" placeholder="yyyy-mm-dd" onClick="WdatePicker()">
+											</div>
+											<label for="madeDateStr" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">删除标记</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_deleteFlag" name="data_deleteFlag" placeholder="删除标记">
+												<select class="form-control select2" id="deleteFlag" name="deleteFlag" placeholder="删除标记" style="width: 100%;"></select>
+											</div>
+											<label for="deleteFlag" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">备注</label>
+											<div class="col-sm-8">
+												<textarea class="form-control" rows="3" id="memo" name="memo" placeholder="备注" style="resize:none;"></textarea>
+											</div>
+											<label for="memo" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button id="btn_save" type="button" class="btn btn-default"><i class="fa fa-save"></i>保存</button>
+												<button id="btn_return" class="btn btn-default"><i class="fa fa-undo"></i>返回</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../plugins/validation/dist/jquery.validate.js"></script>
+<script src="../../plugins/validation/dist/locales/messages_zh.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../plugins/fastclick/fastclick.min.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../../other/js/html5shiv.min.js"></script>
+<script src="../../other/js/respond.min.js"></script>
+<![endif]-->
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/manytagfileupload.js"></script>
+<script src="../../dist/js/popup.js"></script>
+<script>
+	var pk = null;
+	var pkColumnName = null;
+	var values = null;
+	
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initUI();
+		initData();
+		initValidate();
+	}
+	
+	function initData() {
+		var urltype = getQueryString('id'); 
+		if (urltype) {
+			pk = unescape(urltype);
+		}
+		pkColumnName = getQueryString('key'); 
+		
+		if (isModify()) {
+			loadData(pkColumnName, pk);
+		} else {
+			getSelectOptionsFromTable('', 'type1', 'c_type_info', 'code', 'name');
+			getSelectOptionsFromTable('', 'type2', 'c_type_info', 'code', 'name');
+			getSelectOptionsFromTable('', 'type3', 'c_type_info', 'code', 'name');
+			getRadioFromDic('', '', 'madeIn', 'made_in');
+			getSelectOptionsFromDic('', '', 'deleteFlag', 'yes_no', true);
+		}
+	}
+	
+	function initUI() {
+		$('#btn_return').click(function () {
+			window.location.href = "CGoodsInfo.html";
+		});
+		
+		$('#btn_save').click(function () {
+			doSave();
+		});
+		Popup.layout.init();
+	}
+	
+	function isModify() {
+		return (null != pk && "" != pk);
+	}
+	
+	function loadData(pkColumnName, pk) {
+		var query = {};
+		query.uid = pk;
+		
+		Base.ajax({
+			url: "/XServer/cGoodsInfo.do?_method=doSearch",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(query)
+			},
+			mysuccess: function(val) {
+				if (JSON.stringify(val) == "{}") {
+					return;
+				}
+				setUIInfo(val);
+			}
+		});
+	}
+	
+	function setUIInfo(val) {
+		var data = val.rows[0];
+		
+		$("#uid").val(data.uid).attr("disabled",true);
+		$("#goodsNum").val(data.goodsNum);
+		$("#goodsName").val(data.goodsName);
+		var selectedValuetype1 = data.type1;
+		getSelectOptionsFromTable(selectedValuetype1, 'type1', 'c_type_info', 'code', 'name');
+		var selectedValuetype2 = data.type2;
+		getSelectOptionsFromTable(selectedValuetype2, 'type2', 'c_type_info', 'code', 'name');
+		var selectedValuetype3 = data.type3;
+		getSelectOptionsFromTable(selectedValuetype3, 'type3', 'c_type_info', 'code', 'name');
+		$("#price").val(data.price);
+		$("#discountPrice").val(data.discountPrice);
+		$("#barcode").val(data.barcode);
+		$("#manufacturer").val(data.manufacturer);
+		$("#manufacturerStr").val(data.manufacturerStr);
+		getUploadFileByUid(data.imagesUid, 'imagesUid');
+		getUploadFileByUid(data.licenseFileUid, 'licenseFileUid');
+		$("#weight").val(data.weight);
+		var radioValuemadeIn = data.madeIn;
+		getRadioFromDic('', radioValuemadeIn, 'madeIn', 'made_in');
+		$("#madeDateStr").val(data.madeDateStr);
+		var selectedValuedeleteFlag = data.deleteFlag;
+		getSelectOptionsFromDic('', selectedValuedeleteFlag, 'deleteFlag', 'yes_no');
+		$("#memo").val(data.memo);
+		$("#createTimeStr").val(data.createTimeStr);
+		$("#createUser").val(data.createUser);
+		$("#updateTimeStr").val(data.updateTimeStr);
+		$("#updateUser").val(data.updateUser);
+	}
+	
+	function doSave() {
+		if (!$("#form").valid()) {
+			return;
+		}
+		
+		if (!checkValid()) {
+			return;
+		}
+		
+		var addJson = {
+			"uid": $("#uid").val(),
+			"goodsNum": $("#goodsNum").val(),
+			"goodsName": $("#goodsName").val(),
+			"type1": $("#type1").val(),
+			"type2": $("#type2").val(),
+			"type3": $("#type3").val(),
+			"price": $("#price").val(),
+			"discountPrice": $("#discountPrice").val(),
+			"barcode": $("#barcode").val(),
+			"manufacturer": $("#manufacturer").val(),
+			"imagesUid": $("#imagesUid").val(),
+			"licenseFileUid": $("#licenseFileUid").val(),
+			"weight": $("#weight").val(),
+			"madeIn": $("input:radio[name='madeIn']:checked").val(),
+			"madeDateStr": $("#madeDateStr").val(),
+			"deleteFlag": $("#deleteFlag").val(),
+			"memo": $("#memo").val(),
+			"createTimeStr": $("#createTimeStr").val(),
+			"createUser": $("#createUser").val(),
+			"updateTimeStr": $("#updateTimeStr").val(),
+			"updateUser": $("#updateUser").val()
+		};
+		var fd = new FormData();
+		fd.append("_json", JSON.stringify(addJson));
+		setUploadFileToFormData(fd);
+		ajax(fd);
+	}
+	
+	function ajax(obj) {
+		var url = "/XServer/cGoodsInfo.do?_method=insert";
+		if (isModify()) {
+			url = "/XServer/cGoodsInfo.do?_method=update";
+		}
+		var data = obj;
+		
+		Base.ajax({
+			url: url,
+			type: "post",
+			dataType: "json",
+			data: data,
+			processData: false,
+			contentType: false,
+			mysuccess: function(data) {
+				var count = data.count;
+				if (count == 0) {
+					$.messager.alert("提示", data.message.message);
+				} else {
+					$.messager.alert("提示", getMessage("MSG_COMMON_I0005", "保存"));
+				}
+			}
+		});
+	}
+	
+	function checkValid() {
+//		var uid = $("#uid").val();
+//		if ("" == uid.trim()) {
+//			$.messager.alert("提示", getMessage('MSG_COMMON_I0003', "UID"));
+//			return false;
+//		}
+		
+		return true;
+	}
+	
+	var validator;
+	function initValidate() {
+		validator = $("#form").validate({
+			debug: true,//不提交表单
+			rules: {
+				uid: {
+					required: true,
+					maxlength: 45
+				},
+				goodsNum: {
+					required: true,
+					maxlength: 45
+				},
+				goodsName: {
+					required: true,
+					maxlength: 45
+				},
+				type1: {
+					required: true,
+					maxlength: 45
+				},
+				type2: {
+					required: true,
+					maxlength: 45
+				},
+				type3: {
+					required: true,
+					maxlength: 45
+				},
+				price: {
+					required: true,
+				},
+				barcode: {
+					maxlength: 45
+				},
+				manufacturer: {
+					maxlength: 45
+				},
+				imagesUid: {
+					required: true,
+					maxlength: 1024
+				},
+				licenseFileUid: {
+					maxlength: 1024
+				},
+				madeIn: {
+					maxlength: 45
+				},
+				deleteFlag: {
+					maxlength: 45
+				},
+				memo: {
+					maxlength: 1024
+				},
+				createUser: {
+					maxlength: 45
+				},
+				updateUser: {
+					maxlength: 45
+				},
+			},
+			errorPlacement: function(error, element) {
+				// Append error within linked label
+				$(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
+			},
+			errorElement: "span"
+		});
+	}
+	
+	function manufacturerPopupCallback(data) {
+		var row = data;
+		if (typeof(row) != 'undefined') {
+			$('#manufacturer').val(row['code']);
+			$('#manufacturerStr').val(row['name']);
+		}
+	}
+</script>
+</html>

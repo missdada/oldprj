@@ -1,0 +1,13 @@
+.but-permit {
+	display:none;
+}
+
+.but-permit-on {
+	display:block;
+}
+
+.imageicon {
+    display: inline-block;
+    width: 68px;
+    height: auto;
+}

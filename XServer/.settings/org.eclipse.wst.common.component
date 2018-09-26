@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="XServer">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/resources"/>
+        <dependent-module archiveName="framework.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/framework/framework">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="manytagUtil.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/manytagUtil/manytagUtil">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/XServer/build/classes"/>
+        <property name="context-root" value="XServer"/>
+    </wb-module>
+</project-modules>

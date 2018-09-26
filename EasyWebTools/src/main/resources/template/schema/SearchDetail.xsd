@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="searchDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="search"/>
+				<xs:element ref="toolBar"/>
+				<xs:element ref="listView"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="search">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="searchField"/>
+			</xs:sequence>
+			<xs:attribute name="controlWidth" use="required" type="xs:string"/>
+			<xs:attribute name="display" use="required" type="xs:boolean"/>
+			<xs:attribute name="labelWidth" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="searchField">
+		<xs:complexType>
+			<xs:attribute name="caption" use="required" type="xs:string"/>
+			<xs:attribute name="control" use="required" type="xs:string"/>
+			<xs:attribute name="dbColumnName" use="required" type="xs:string"/>
+			<xs:attribute name="display" type="xs:boolean"/>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="operator" use="required" type="xs:string"/>
+			<xs:attribute name="operatorClose" use="required" type="xs:string"/>
+			<xs:attribute name="operatorOpen" use="required" type="xs:string"/>
+			<xs:attribute name="primaryKey" use="required" type="xs:boolean"/>
+			<xs:attribute name="required" use="required" type="xs:boolean"/>
+			<xs:attribute name="selectType" type="xs:boolean"/>
+			<xs:attribute name="masterCode" type="xs:string"/>
+			<xs:attribute name="masterDataCode" type="xs:string"/>
+			<xs:attribute name="masterDataValue" type="xs:string"/>
+			<xs:attribute name="masterFirstBlank" type="xs:boolean"/>
+			<xs:attribute name="style" use="required" type="xs:string"/>
+			<xs:attribute name="type" use="required" type="xs:string"/>
+			<xs:attribute name="value" use="required" type="xs:string"/>
+			<xs:attribute name="width" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="toolBar">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="toolButton"/>
+			</xs:sequence>
+			<xs:attribute name="display" use="required" type="xs:boolean"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="toolButton">
+		<xs:complexType>
+			<xs:attribute name="caption" use="required" type="xs:string"/>
+			<xs:attribute name="display" type="xs:boolean"/>
+			<xs:attribute name="iconCls" use="required" type="xs:string"/>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="onclick" use="required" type="xs:string"/>
+			<xs:attribute name="para" use="required" type="xs:string"/>
+			<xs:attribute name="scope" use="required" type="xs:string"/>
+			<xs:attribute name="style" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="listView">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="column"/>
+			</xs:sequence>
+			<xs:attribute name="checkbox" use="required" type="xs:boolean"/>
+			<xs:attribute name="fitColumns" use="required" type="xs:boolean"/>
+			<xs:attribute name="height" use="required" type="xs:string"/>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+			<xs:attribute name="pageSize" use="required" type="xs:integer"/>
+			<xs:attribute name="pagination" use="required" type="xs:boolean"/>
+			<xs:attribute name="rownumbers" use="required" type="xs:boolean"/>
+			<xs:attribute name="showFooter" use="required" type="xs:boolean"/>
+			<xs:attribute name="singleSelect" use="required" type="xs:boolean"/>
+			<xs:attribute name="tableid" use="required" type="xs:string"/>
+			<xs:attribute name="width" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="column">
+		<xs:complexType>
+			<xs:attribute name="align" use="required" type="xs:string"/>
+			<xs:attribute name="caption" use="required" type="xs:string"/>
+			<xs:attribute name="dbColumnName" use="required" type="xs:string"/>
+			<xs:attribute name="display" use="required" type="xs:boolean"/>
+			<xs:attribute name="formatter" type="xs:string"/>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="primaryKey" use="required" type="xs:boolean"/>
+			<xs:attribute name="sortable" use="required" type="xs:boolean"/>
+			<xs:attribute name="valign" use="required" type="xs:string"/>
+			<xs:attribute name="width" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

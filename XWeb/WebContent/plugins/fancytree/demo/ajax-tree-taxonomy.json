@@ -1,0 +1,22 @@
+[
+	{"title": "主题", "expanded": true, "type": "图片", "count": "133", "provider": "精品购物指南", "children": [
+		{"title": "Chordate", "type": "图片", "count": "21", "provider": "精品购物时尚", "children": [
+			{"title": "Mammal", "type": "图片", "count": "3", "provider": "精品风尚", "children": [
+				{"title": "Primate", "type": "图片", "count": "18", "provider": "精品风尚", "children": [
+					{"title": "Primate", "type": "图片", "count": "18", "provider": "明星", "children": [
+					]},
+					{"title": "Carnivora", "type": "图片", "count": "10", "provider": "首饰", "children": [
+					]}
+				]},
+				{"title": "Carnivora", "type": "图片", "count": "18", "provider": "精品风尚", "children": [
+					{"title": "Felidae", "type": "图片", "count": "18", "provider": "精品风尚", "lazy": true}
+				]}
+			]}
+		]},
+		{"title": "Arthropoda", "expanded": true, "type": "图片", "count": "18", "provider": "精品风尚", "children": [
+			{"title": "Insect", "type": "图片", "count": "18", "provider": "精品风尚", "children": [
+				{"title": "Diptera", "type": "图片", "count": "18", "provider": "精品风尚","lazy": true}
+			]}
+		]}
+	]}
+]

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../other/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../other/css/ionicons.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<style>
+		.tiant >div.add {
+			display:none;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>类型管理</h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-dashboard"></i>首页</a></li>
+					<li><a href="#">详细数据</a></li>
+					<li><a href="#">类型管理</a></li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-md-9">
+						<div class="nav-tabs-custom">
+							<div class="tab-content">
+								<div class="active tab-pane" id="settings">
+									<form id="form" class="form-horizontal">
+										<div class="form-group hide">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>ID</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="id" name="id" disabled="disabled" placeholder="ID">
+											</div>
+											<label for="id" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>编码</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="code" name="code" disabled="disabled" placeholder="编码">
+											</div>
+											<label for="code" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>名称</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="name" name="name" disabled="disabled" placeholder="名称">
+											</div>
+											<label for="name" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button id="btn_save" type="button" class="btn btn-default hide"><i class="fa fa-save"></i>保存</button>
+												<button id="btn_return" class="btn btn-default"><i class="fa fa-undo"></i>返回</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../plugins/validation/dist/jquery.validate.js"></script>
+<script src="../../plugins/validation/dist/locales/messages_zh.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../plugins/fastclick/fastclick.min.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../../other/js/html5shiv.min.js"></script>
+<script src="../../other/js/respond.min.js"></script>
+<![endif]-->
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script>
+	var pk = null;
+	var pkColumnName = null;
+	var values = null;
+	
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initUI();
+		initData();
+	}
+	
+	function initData() {
+		var urltype = getQueryString('id');
+		
+		pk = unescape(urltype);
+		pkColumnName = getQueryString('key');
+		
+		if (isModify()) {
+			loadData(pkColumnName, pk);
+		} else {
+		}
+	}
+	
+	function initUI() {
+		$('#btn_return').click(function () {
+			test();
+		});
+	}
+	
+	function isModify() {
+		return (null != pk && "" != pk);
+	}
+	
+	function loadData(pkColumnName, pk) {
+		var query = {};
+		query.id = pk;
+		
+		Base.ajax({
+			url: "/XServer/cType.do?_method=view",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(query)
+			},
+			mysuccess: function(val) {
+				if (JSON.stringify(val) == "{}") {
+					return;
+				}
+				//setUIInfo(val);
+			}
+		});
+	}
+	
+	function test() {
+		var query = {};
+		query.id = 5;
+		Base.ajax({
+			url: "http://localhost:7001//api/equipment_type/getType2",
+			type: "post",
+			dataType: "json",
+			data: {
+				id:5
+			},
+			mysuccess: function(val) {
+				console.log(val)
+			}
+		});
+	}
+	
+	function setUIInfo(val) {
+		//var data = val.rows[0];
+		var data = val.row;
+		
+		$("#id").val(data.id).attr("disabled",true);
+		//$("#id").val(data.id);
+		//$("#id").attr("disabled",true);
+		
+		$("#code").val(data.code);
+		$("#name").val(data.name);
+		$("#createTimeStr").val(data.createTimeStr);
+		$("#createUser").val(data.createUser);
+		$("#updateTimeStr").val(data.updateTimeStr);
+		$("#updateUser").val(data.updateUser);
+	}
+</script>
+</html>

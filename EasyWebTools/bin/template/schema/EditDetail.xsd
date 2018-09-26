@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="editDetail">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="edit"/>
+				<xs:element ref="functionButtons"/>
+			</xs:sequence>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="edit">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="editField"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="editField">
+		<xs:complexType>
+			<xs:attribute name="caption" use="required" type="xs:string"/>
+			<xs:attribute name="control" use="required" type="xs:string"/>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="prompt" type="xs:string"/>
+			<xs:attribute name="required" use="required" type="xs:boolean"/>
+			<xs:attribute name="style" use="required" type="xs:string"/>
+			<xs:attribute name="type" use="required" type="xs:string"/>
+			<xs:attribute name="value" use="required" type="xs:string"/>
+			<xs:attribute name="width" use="required" type="xs:string"/>
+			<xs:attribute name="selectType" type="xs:boolean"/>
+			<xs:attribute name="masterCode" type="xs:string"/>
+			<xs:attribute name="masterDataCode" type="xs:string"/>
+			<xs:attribute name="masterDataValue" type="xs:string"/>
+			<xs:attribute name="masterFirstBlank" type="xs:boolean"/>
+			<xs:attribute name="primaryKey" type="xs:boolean"/>
+			<xs:attribute name="display" type="xs:boolean"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="functionButtons">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="functionButton"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="functionButton">
+		<xs:complexType>
+			<xs:attribute name="caption" use="required" type="xs:string"/>
+			<xs:attribute name="iconCls" use="required" type="xs:string"/>
+			<xs:attribute name="id" use="required" type="xs:string"/>
+			<xs:attribute name="name" use="required" type="xs:string"/>
+			<xs:attribute name="para" use="required" type="xs:string"/>
+			<xs:attribute name="scope" use="required" type="xs:string"/>
+			<xs:attribute name="style" use="required" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

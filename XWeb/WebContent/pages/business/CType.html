@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="../../bootstrap-table/bootstrap-table.css" />
+	<link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="../../dist/css/manytag.css">
+	<style type="text/css">
+		td.alignRight {
+			text-align: right;
+		}
+		td.alignCenter {
+			text-align: center;
+		}
+		tr th {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<section class="content-header">
+			<h1>详细数据	<small>类型管理</small></h1>
+			<ol class="breadcrumb">
+				<li><a href="../../dashboard.html"><i class="fa fa-home"></i>首页</a></li>
+				<li><a href="#">详细数据</a></li>
+				<li class="active">类型管理</li>
+			</ol>
+		</section>
+		<section class="content">
+			<div class="row">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">检索条件</h3>
+						<div class="box-tools pull-right">
+							<button class="btn btn-box-tool" data-widget="collapse">
+								<i class="fa fa-minus fa-lg"></i>
+							</button>
+						</div>
+					</div>
+					<form class="form-horizontal">
+						<div class="box-body">
+							<div class="form-group">
+								<div class="col-sm-12 col-md-6 col-lg-4">
+									<div class="col-sm-3 col-md-5 col-lg-5 control-label" style="border:0;"><i class="fa" style="font-weight:bold;">编码：</i></div>
+									<div class="col-sm-7 col-md-7 col-lg-7">
+										<input type="text" class="form-control" id="code">
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6 col-lg-4">
+									<div class="col-sm-3 col-md-5 col-lg-5 control-label" style="border:0;"><i class="fa" style="font-weight:bold;">名称：</i></div>
+									<div class="col-sm-7 col-md-7 col-lg-7">
+										<input type="text" class="form-control" id="name">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="box-footer">
+							<a class="btn btn-info but-permit" onclick="doSearch();" data-user-permis="btn_view">检索</a>
+						</div>
+					</form>
+				</div>
+				<div class="box">
+					<div class="box-body">
+						<div id="transform-buttons" class="btn-group btn-default" style="position: absolute; top: 20px; left: 10px;">
+							<button class="btn btn-default but-permit" id="btn_add" data-user-permis="btn_add">
+								<i class="fa fa-file-o"></i><span data-zh="新建" data-es="Transformar">新建</span>
+							</button>
+							<button class="btn btn-default but-permit" id="btn_modify" data-user-permis="btn_modify">
+								<i class="fa fa-edit"></i><span data-zh="修改" data-es="Transformar">修改</span>
+							</button>
+							<button class="btn btn-default but-permit" id="btn_view" data-user-permis="btn_view">
+								<i class="fa fa-eye"></i><span data-zh="查看" data-es="Transformar">查看</span>
+							</button>
+							<button class="btn btn-default but-permit" id="btn_delete" data-user-permis="btn_delete">
+								<i class="fa fa-trash"></i><span data-zh="删除" data-es="Destruir">删除</span>
+							</button>
+						</div>
+						<table id="table" data-toggle="table"
+							data-url="/XServer/cType.do?_method=doSearch"
+							data-click-to-select="true"
+							data-side-pagination="server"
+							data-pagination="true"
+							data-page-list="[10, 25, 50, 100]"
+							data-show-refresh="true"
+							data-response-handler="table_responseHandler"
+							data-query-params="queryParams">
+							<thead>
+								<tr>
+									<th data-field="state" data-checkbox="true"></th>
+									<th data-formatter="getindex">NO</th>
+									<th data-field="id" data-visible="false">ID</th>
+									<th data-field="code">编码</th>
+									<th data-field="name">名称</th>
+									<th data-field="createTimeStr" data-visible="false">创建时间</th>
+									<th data-field="createUser" data-visible="false">创建人</th>
+									<th data-field="updateTimeStr" data-visible="false">更新时间</th>
+									<th data-field="updateUser" data-visible="false">更新人</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../bootstrap-table/bootstrap-table.js"></script>
+<script src="../../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<script src="../../dist/js/popover2.js"></script>
+<script src="../../dist/js/popover2t.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.extensions.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.regex.extensions.js"></script>
+<script src="../../plugins/input-mask/jquery.inputmask.numeric.extensions.js"></script>
+<script>
+	var ismodal = 0;
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initData();
+		initUI();
+	}
+	
+	function initData() {
+		ismodal = getAndDelLS('CType_modal');
+		if (ismodal) {
+			ismodal = '1';
+		}
+	}
+	
+	function initUI() {
+		$('#btn_delete').prop('disabled', true);
+		$('#btn_modify').prop('disabled', true);
+		$('#btn_view').prop('disabled', true);
+		
+		$('#table').on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table load-success.bs.table', function () {
+			$('#btn_delete').prop('disabled', !$('#table').bootstrapTable('getSelections').length);
+			$('#btn_modify').prop('disabled', $('#table').bootstrapTable('getSelections').length != 1);
+			$('#btn_view').prop('disabled', $('#table').bootstrapTable('getSelections').length != 1);
+			
+			if (ismodal == '1') {
+				setLS('popreturnval', getPopupResult());
+			}
+		});
+		
+		if (ismodal != '1') {
+			$('#btn_delete').click(function (){ doDelete(getSelectedItems()); });
+			$('#btn_modify').click(function (){ doModify(getSelectedItems()); });
+			$('#btn_add').click(function (){ doAdd(); });
+			$('#btn_view').click(function (){ doView(getSelectedItems()); });
+			
+			getUserButton();
+		}
+		initPopover2();
+		initPopover2t();
+	}
+	
+	function getSelectedItems() {
+		return $('#table').bootstrapTable('getSelections');
+	}
+	
+	function actionFormatter(value, row, index) {
+		return [
+			'<button class="btn btn-primary resend" style="margin:-10px 6px;">详细</button>'
+		].join('');
+	}
+	
+	window.actionEvents = {
+		'click .resend': function (e, value, row, index) {
+			alert('重新发送, row: ' + JSON.stringify(row));
+			console.log(value, row, index);
+		}
+	};
+	
+	function doDelete(oJsonSelects) {
+		$.messager.confirm('提示', getMessage('MSG_COMMON_I0002'), function(r) {
+			ok: {
+				var data = [];
+				for (var i = 0, l = oJsonSelects.length; i < l; i++) {
+					var ids = {};
+					ids.id = oJsonSelects[i].id;
+					data.push(ids);
+				}
+				
+				Base.ajax({
+					url: "/XServer/cType.do?_method=deleteList",
+					type: "post",
+					dataType: "json",
+					data: {
+						_json: JSON.stringify(data)
+					},
+					mysuccess: function(data) {
+						var count = data.count;
+						if (count == 0) {
+							$.messager.alert("提示", data.errorMessage);
+						}
+						
+						$('#btn_delete').prop('disabled', true);
+						doSearch();
+					}
+				});
+			}
+		});
+	}
+	
+	function doModify(oJsonSelects) {
+		var selects = oJsonSelects;
+		var idKey = "id";
+		var idValue = escape(selects[0].id);
+		
+		window.location.href = "CType_Detail.html?id=" + idValue + "&key=" + idKey;
+	}
+	
+	function doView(oJsonSelects) {
+		var selects = oJsonSelects;
+		var idKey = "id";
+		var idValue = escape(selects[0].id);
+		
+		window.location.href = "CType_View.html?id=" + idValue + "&key=" + idKey;
+	}
+	
+	function doAdd() {
+		window.location.href = "CType_Detail.html";
+	}
+	
+	function doSearch() {
+		$('#table').bootstrapTable('destroy');
+		$('#table').bootstrapTable();
+		return;
+	}
+	
+	function queryParams(params) {
+		var paras = {};
+		var code = $("#code").val();
+		if (code && code != '') {
+			paras.code = escape(code);
+		}
+		var name = $("#name").val();
+		if (name && name != '') {
+			paras.name = escape(name);
+		}
+		
+		var queryPara = JSON.stringify(paras);
+		params._json = queryPara;
+		
+		return params;
+	}
+	
+	function getPopupResult() {
+		return JSON.stringify($('#table').bootstrapTable('getSelections'));
+	}
+</script>
+</html>

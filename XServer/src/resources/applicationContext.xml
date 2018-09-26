@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	<context:component-scan base-package="manytag,manytag.common,manytag.framework" />
+
+	<bean id="message-resources"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>
+					messages/message
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="request-handler" class="manytag.framework.dispatch.service.core.HttpRequestHandler">
+		<property name="requestInterceptors">
+			<list>
+				<bean id="authorityInterceptor" class="manytag.common.interceptor.AuthorityInterceptor">
+					<property name="exclude">
+						<list>
+							<value>manytag.common.action.LoginAction:login</value>
+							<value>manytag.common.action.LoginAction:logout</value>
+							<value>manytag.common.action.LoginAction:getLoginUserInfo</value>
+							<value>manytag.common.action.MenuAction:userMenuSearch</value>
+							<value>manytag.common.action.GetDropDownAction:fromTable</value>
+							<value>manytag.common.action.GetDropDownAction:fromDic</value>
+							<value>manytag.common.action.MenuAction:getUserButton</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="json-response-handler"
+		class="manytag.framework.dispatch.base.response.handler.impl.JsonResponseHandler">
+	</bean>
+	
+	<bean id="json-response-redirect-handler"
+		class="manytag.framework.dispatch.base.response.handler.impl.JsonRedirectResponseHandler">
+	</bean>
+
+	<bean id="freemarker-response-handler"
+		class="manytag.framework.dispatch.base.response.handler.impl.FreemarkerResponseHandler">
+	</bean>
+
+	<bean id="system-config" class="manytag.common.pub.SystemConfig">
+		<property name="configFile" value="/system-config.xml" />
+	</bean>
+</beans>

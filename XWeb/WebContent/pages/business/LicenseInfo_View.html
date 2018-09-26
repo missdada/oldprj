@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../other/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../other/css/ionicons.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="../../dist/css/yu.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>产品授权信息</h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-dashboard"></i>首页</a></li>
+					<li><a href="#">详细数据</a></li>
+					<li><a href="#">产品授权信息</a></li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-md-9">
+						<div class="nav-tabs-custom">
+							<div class="tab-content">
+								<div class="active tab-pane" id="settings">
+									<form id="form" class="form-horizontal">
+										<div class="form-group hide">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>UID</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="uid" name="uid" disabled="disabled" placeholder="UID">
+											</div>
+											<label for="uid" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>是否试用版</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_licenseTrialFlag" name="data_licenseTrialFlag" placeholder="是否试用版">
+												<select class="form-control select2" id="licenseTrialFlag" name="licenseTrialFlag" placeholder="是否试用版" style="width: 100%;" disabled="disabled"></select>
+											</div>
+											<label for="licenseTrialFlag" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>产品名称</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_productName" name="data_productName" placeholder="产品名称">
+												<select class="form-control select2" id="productName" name="productName" placeholder="产品名称" style="width: 100%;" disabled="disabled"></select>
+											</div>
+											<label for="productName" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>版本号</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_productVersion" name="data_productVersion" placeholder="版本号">
+												<select class="form-control select2" id="productVersion" name="productVersion" placeholder="版本号" style="width: 100%;" disabled="disabled"></select>
+											</div>
+											<label for="productVersion" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">硬件码</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="mac" name="mac" disabled="disabled" placeholder="硬件码">
+											</div>
+											<label for="mac" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>客户名称</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="customerName" name="customerName" disabled="disabled" placeholder="客户名称">
+											</div>
+											<label for="customerName" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">合同扫描件</label>
+											<div class="col-sm-8">
+												<div class="tiant" disabled="disabled">
+													<div id="contractImagesUid_preview0" onclick="xian(this)" class="yi">
+														<img id="contractImagesUid_imghead0" border="0" src=""/>
+														<input type="file" name="contractImagesUid" onchange="previewImage(this,0);addimgfile(this,0);"/>
+													</div>
+													<div id="contractImagesUid" class="add"></div>
+												</div>
+											</div>
+											<label for="contractImagesUid" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>出库申请单</label>
+											<div class="col-sm-8">
+												<div class="tiant" disabled="disabled">
+													<div id="requestSheetFileUid_preview0" onclick="xian(this)" class="yi">
+														<img id="requestSheetFileUid_imghead0" border="0" src=""/>
+														<input type="file" name="requestSheetFileUid" onchange="previewImage(this,0);addimgfile(this,0);"/>
+													</div>
+													<div id="requestSheetFileUid" class="add"></div>
+												</div>
+											</div>
+											<label for="requestSheetFileUid" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">安装截止时间</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="installValidDate" name="installValidDate" disabled="disabled" placeholder="安装截止时间">
+											</div>
+											<label for="installValidDate" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">试用期限(天)</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_trialDays" name="data_trialDays" placeholder="试用期限(天)">
+												<select class="form-control select2" id="trialDays" name="trialDays" placeholder="试用期限(天)" style="width: 100%;" disabled="disabled"></select>
+											</div>
+											<label for="trialDays" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">授权码</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="licenseCode" name="licenseCode" disabled="disabled" placeholder="授权码">
+											</div>
+											<label for="licenseCode" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">备注</label>
+											<div class="col-sm-8">
+												<textarea class="form-control" rows="3" id="memo" name="memo" disabled="disabled" placeholder="备注"></textarea>
+											</div>
+											<label for="memo" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button id="btn_save" type="button" class="btn btn-default hide"><i class="fa fa-save"></i>保存</button>
+												<button id="btn_return" class="btn btn-default"><i class="fa fa-undo"></i>返回</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../plugins/validation/dist/jquery.validate.js"></script>
+<script src="../../plugins/validation/dist/locales/messages_zh.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../plugins/fastclick/fastclick.min.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../../other/js/html5shiv.min.js"></script>
+<script src="../../other/js/respond.min.js"></script>
+<![endif]-->
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/manytagfileupload.js"></script>
+<script>
+	var pk = null;
+	var pkColumnName = null;
+	var values = null;
+	
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initUI();
+		initData();
+	}
+	
+	function initData() {
+		var urltype = getQueryString('id');
+		pk = unescape(urltype);
+		pkColumnName = getQueryString('key');
+		
+		if (isModify()) {
+			loadData(pkColumnName, pk);
+		} else {
+			getSelectOptionsFromDic('', '', 'licenseTrialFlag', 'license_trial_flag');
+			getSelectOptionsFromDic('', '', 'productName', 'product_name');
+			getSelectOptionsFromDic('', '', 'productVersion', 'product_version');
+			getSelectOptionsFromDic('', '', 'trialDays', 'trial_days', true);
+		}
+	}
+	
+	function initUI() {
+		$('#btn_return').click(function () {
+			history.back();
+		});
+	}
+	
+	function isModify() {
+		return (null != pk && "" != pk);
+	}
+	
+	function loadData(pkColumnName, pk) {
+		var query = {};
+		query.uid = pk;
+		
+		Base.ajax({
+			url: serverSrc + "/licenseInfo.do?_method=doSearch",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(query)
+			},
+			mysuccess: function(val) {
+				if (JSON.stringify(val) == "{}") {
+					return;
+				}
+				setUIInfo(val);
+			}
+		});
+	}
+	
+	function setUIInfo(val) {
+		var data = val.rows[0];
+		
+		$("#uid").val(data.uid).attr("disabled",true);
+		var selectedValuelicenseTrialFlag = data.licenseTrialFlag;
+		getSelectOptionsFromDic('', selectedValuelicenseTrialFlag, 'licenseTrialFlag', 'license_trial_flag');
+		var selectedValueproductName = data.productName;
+		getSelectOptionsFromDic('', selectedValueproductName, 'productName', 'product_name');
+		var selectedValueproductVersion = data.productVersion;
+		getSelectOptionsFromDic('', selectedValueproductVersion, 'productVersion', 'product_version');
+		$("#mac").val(data.mac);
+		$("#customerName").val(data.customerName);
+		getUploadFileByUid(data.contractImagesUid, 'contractImagesUid');
+		getUploadFileByUid(data.requestSheetFileUid, 'requestSheetFileUid');
+		$("#installValidDate").val(data.installValidDate);
+		var selectedValuetrialDays = data.trialDays;
+		getSelectOptionsFromDic('', selectedValuetrialDays, 'trialDays', 'trial_days');
+		$("#licenseCode").val(data.licenseCode);
+		$("#memo").val(data.memo);
+		$("#createTimeStr").val(data.createTimeStr);
+		$("#createUser").val(data.createUser);
+		$("#updateTimeStr").val(data.updateTimeStr);
+		$("#updateUser").val(data.updateUser);
+	}
+</script>
+</html>

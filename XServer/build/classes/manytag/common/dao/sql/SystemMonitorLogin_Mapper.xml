@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.common.dao.entity.mapper.ISystemMonitorLoginMapper">
+	<resultMap id="SystemMonitorLoginEntityResult" type="manytag.common.dao.entity.SystemMonitorLoginEntity">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_code" property="userCode" jdbcType="VARCHAR" />
+		<result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.common.dao.entity.SystemMonitorLoginSearchEntity" resultMap="SystemMonitorLoginEntityResult">
+		select
+			id,
+			user_code,
+			login_time,
+			ip,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_login
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="searchAll" resultMap="SystemMonitorLoginEntityResult">
+		select
+			id,
+			user_code,
+			login_time,
+			ip,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_login
+	</select>
+
+	<select id="search" parameterType="manytag.common.dao.entity.SystemMonitorLoginSearchEntity" resultMap="SystemMonitorLoginEntityResult">
+		select
+			id,
+			user_code,
+			login_time,
+			ip,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_login
+		<trim prefix="where" prefixOverrides="and">
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				and user_code like CONCAT('%', #{userCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="loginTimeSearchBegin != null">
+				and login_time &gt;= #{loginTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="loginTimeSearchEnd != null">
+				and login_time &lt;= #{loginTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip like CONCAT('%', #{ip,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.common.dao.entity.SystemMonitorLoginSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from system_monitor_login
+		<trim prefix="where" prefixOverrides="and">
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				and user_code like CONCAT('%', #{userCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="loginTimeSearchBegin != null">
+				and login_time &gt;= #{loginTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="loginTimeSearchEnd != null">
+				and login_time &lt;= #{loginTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip like CONCAT('%', #{ip,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="SystemMonitorLoginEntityResult">
+		select
+			id,
+			user_code,
+			login_time,
+			ip,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_login
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from system_monitor_login
+	</select>
+
+	<delete id="delete" parameterType="manytag.common.dao.entity.SystemMonitorLoginEntity">
+		delete from system_monitor_login
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from system_monitor_login
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(id = #{entity.id,jdbcType=INTEGER})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.common.dao.entity.SystemMonitorLoginEntity">
+		delete from system_monitor_login
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				and user_code = #{userCode,jdbcType=VARCHAR}
+			</if>
+			<if test="loginTime != null">
+				and login_time = #{loginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip = #{ip,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.common.dao.entity.SystemMonitorLoginEntity">
+		insert into system_monitor_login
+		(
+			id
+			<if test="userCode != null and userCode != ''">
+			,user_code
+			</if>
+			<if test="loginTime != null">
+			,login_time
+			</if>
+			<if test="ip != null and ip != ''">
+			,ip
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{id,jdbcType=INTEGER}
+			<if test="userCode != null and userCode != ''">
+			,#{userCode,jdbcType=VARCHAR}
+			</if>
+			<if test="loginTime != null">
+			,#{loginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ip != null and ip != ''">
+			,#{ip,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.common.dao.entity.SystemMonitorLoginEntity">
+		update system_monitor_login
+		set id = #{id,jdbcType=INTEGER}
+			<if test="userCode != null and userCode != ''">
+			,user_code = #{userCode,jdbcType=VARCHAR}
+			</if>
+			<if test="loginTime != null">
+			,login_time = #{loginTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="ip != null and ip != ''">
+			,ip = #{ip,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

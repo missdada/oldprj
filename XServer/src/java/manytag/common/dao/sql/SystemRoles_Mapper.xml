@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.common.dao.entity.mapper.ISystemRolesMapper">
+	<resultMap id="SystemRolesEntityResult" type="manytag.common.dao.entity.SystemRolesEntity">
+		<result column="uid" property="uid" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.common.dao.entity.SystemRolesSearchEntity" resultMap="SystemRolesEntityResult">
+		select
+			uid,
+			code,
+			name,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_roles
+		where uid = #{uid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchAll" resultMap="SystemRolesEntityResult">
+		select
+			uid,
+			code,
+			name,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_roles
+	</select>
+
+	<select id="search" parameterType="manytag.common.dao.entity.SystemRolesSearchEntity" resultMap="SystemRolesEntityResult">
+		select
+			uid,
+			code,
+			name,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_roles
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="code != null and code != ''">
+				and code like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.common.dao.entity.SystemRolesSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from system_roles
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="code != null and code != ''">
+				and code like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="SystemRolesEntityResult">
+		select
+			uid,
+			code,
+			name,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_roles
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from system_roles 
+	</select>
+
+	<delete id="delete" parameterType="manytag.common.dao.entity.SystemRolesEntity">
+		delete from system_roles 
+		where uid = #{uid,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from system_roles
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(uid = #{entity.uid,jdbcType=VARCHAR})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.common.dao.entity.SystemRolesEntity">
+		delete from system_roles
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid = #{uid,jdbcType=VARCHAR}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.common.dao.entity.SystemRolesEntity">
+		insert into system_roles
+		(
+			uid
+			,code
+			,name
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{uid,jdbcType=VARCHAR}
+			,#{code,jdbcType=VARCHAR}
+			,#{name,jdbcType=VARCHAR}
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.common.dao.entity.SystemRolesEntity">
+		update system_roles set
+			uid = #{uid,jdbcType=VARCHAR}
+			,code = #{code,jdbcType=VARCHAR}
+			,name = #{name,jdbcType=VARCHAR}
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where uid = #{uid,jdbcType=VARCHAR}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

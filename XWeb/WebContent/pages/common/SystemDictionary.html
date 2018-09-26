@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="../../bootstrap-table/bootstrap-table.css" />
+	<link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<style type="text/css">
+		td.alignRight {
+			text-align: right;
+		}
+		td.alignCenter {
+			text-align: center;
+		}
+		tr th {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>系统管理	<small>数据字典</small></h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-home"></i>首页</a></li>
+					<li>系统管理</li>
+					<li class="active">数据字典</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="box box-danger collapsed-box">
+						<div class="box-header with-border">
+							<h3 class="box-title">检索条件</h3>
+							<div class="box-tools pull-right">
+								<button class="btn btn-box-tool" data-widget="collapse">
+									<i class="fa fa-plus"></i>
+								</button>
+							</div>
+						</div>
+						<form class="form-horizontal">
+							<div class="box-body">
+								<div class="form-group">
+									<div class="col-sm-12 col-md-4 col-lg-3">
+										<label for="code" class="col-sm-3 col-md-5 col-lg-5 control-label">字典编码：</label>
+										<div class="col-sm-7 col-md-7 col-lg-7">
+											<input type="text" class="form-control" id="code" placeholder="字典编码">
+										</div>
+									</div>
+									<div class="col-sm-12 col-md-4 col-lg-3">
+										<label for="name" class="col-sm-3 col-md-5 col-lg-5 control-label">字典名称：</label>
+										<div class="col-sm-7 col-md-7 col-lg-7">
+											<input type="text" class="form-control" id="name" placeholder="字典名称">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="box-footer">
+								<a class="btn btn-info" onclick="doSearch();">检索</a>
+							</div>
+						</form>
+					</div>
+					<div class="box">
+						<div class="box-body">
+							<div id="transform-buttons" class="btn-group btn-default" style="position: absolute; top: 20px; left: 10px;">
+								<button class="btn btn-default" id="btn_add">
+									<i class="fa fa-file-o"></i><span data-zh="转换" data-es="Transformar">新建</span>
+								</button>
+								<button class="btn btn-default" id="btn_modify">
+									<i class="fa fa-edit"></i><span data-zh="转换" data-es="Transformar">修改</span>
+								</button>
+								<button class="btn btn-default" id="btn_delete">
+									<i class="fa fa-trash"></i><span data-zh="删除" data-es="Destruir">删除</span>
+								</button>
+							</div>
+							<table id="table" data-toggle="table"
+								data-click-to-select="true"
+								data-side-pagination="server"
+								data-pagination="true"
+								data-page-list="[10, 25, 50, 100, ALL]"
+								data-show-refresh="true"
+								data-response-handler="table_responseHandler">
+								<thead>
+									<tr>
+										<th data-field="state" data-checkbox="true"></th>
+										<th data-formatter="getindex">NO</th>
+										<th data-field="id" data-visible="false">ID</th>
+										<th data-field="code">字典编码</th>
+										<th data-field="name">字典名称</th>
+										<th data-field="memo">备注</th>
+										<th data-field="createTimeStr" data-visible="false">创建时间</th>
+										<th data-field="createUser" data-visible="false">创建人</th>
+										<th data-field="updateTimeStr" data-visible="false">更新时间</th>
+										<th data-field="updateUser" data-visible="false">更新人</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../bootstrap-table/bootstrap-table.js"></script>
+<script src="../../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<script>
+	var dataSrc = serverSrc + "/systemDictionary.do?_method=doSearch";
+	$("#table").attr("data-url", dataSrc);
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initData();
+		initUI();
+	}
+	
+	function initData() {
+	}
+	
+	function initUI() {
+		$('#btn_delete').prop('disabled', true);
+		$('#btn_modify').prop('disabled', true);
+		
+		$('#table').on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
+			$('#btn_delete').prop('disabled', !$('#table').bootstrapTable('getSelections').length);
+			$('#btn_modify').prop('disabled', $('#table').bootstrapTable('getSelections').length != 1);
+		});
+		
+		$('#btn_delete').click(function (){ doDelete(getSelectedItems()); });
+		$('#btn_modify').click(function (){ doModify(getSelectedItems()); });
+		$('#btn_add').click(function (){ doAdd(); });
+	}
+	
+	function getSelectedItems() {
+		return $('#table').bootstrapTable('getSelections');
+	}
+	
+	function actionFormatter(value, row, index) {
+		return [
+			'<button class="btn btn-primary resend" style="margin:-10px 6px;">详细</button>'
+		].join('');
+	}
+	
+	window.actionEvents = {
+		'click .resend': function (e, value, row, index) {
+			alert('重新发送该, row: ' + JSON.stringify(row));
+		}
+	};
+	
+	function doDelete(oJsonSelects) {
+		$.messager.confirm('提示', getMessage('MSG_COMMON_I0002'), function(r) {
+			ok: {
+				var data = [];
+				for (var i = 0, l = oJsonSelects.length; i < l; i++) {
+					var ids = {};
+					ids.id = oJsonSelects[i].id;
+					ids.code = oJsonSelects[i].code;
+					data.push(ids);
+				}
+				
+				Base.ajax({
+					url: serverSrc + "/systemDictionary.do?_method=deleteList",
+					type: "post",
+					dataType: "json",
+					data: {
+						_json: JSON.stringify(data)
+					},
+					mysuccess: function(data) {
+						var count = data.count;
+						if (count == 0) {
+							$.messager.alert("提示", data.errorMessage);
+						}
+						
+						$('#btn_delete').prop('disabled', true);
+						doSearch();
+					}
+				});
+			}
+		});
+	}
+	
+	function doModify(oJsonSelects) {
+		var selects = getSelectedItems();
+		var idKey = "code";
+		var idValue = oJsonSelects[0].code;
+		
+		var doModifyHerf = "SystemDictionary_Detail.html?id=" + idValue + "&key=" + idKey;
+		window.location.href = doModifyHerf;
+		systemUrl(doModifyHerf);
+	}
+	
+	function doAdd() {
+		var doAddHerf = "SystemDictionary_Detail.html";
+		window.location.href = doAddHerf;
+		systemUrl(doAddHerf);
+	}
+	
+	function doSearch() {
+		var paras = {};
+		var code = $("#code").val();
+		if (code != '') {
+			paras.code = code;
+		}
+		var name = $("#name").val();
+		if (name != '') {
+			paras.name = name;
+		}
+		
+		Base.ajax({
+			url: serverSrc + "/systemDictionary.do?_method=doSearch",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(paras)
+			},
+			
+			mysuccess: function(data) {
+				$('#table').bootstrapTable('load', data);
+			}
+		});
+	}
+</script>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../other/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../other/css/ionicons.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>数据字典管理 </h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-home"></i>首页</a></li>
+					<li>系统管理</li>
+					<li class="active">数据字典管理</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-md-9">
+						<div class="nav-tabs-custom">
+							<div class="tab-content">
+								<div class="active tab-pane" id="settings">
+									<form id="form" class="form-horizontal">
+										<div class="form-group" style="display:none">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>ID</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="id" name="id" placeholder="ID">
+											</div>
+											<label for="id" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>字典编码</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="code" name="code" placeholder="字典编码">
+											</div>
+											<label for="code" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>字典名称</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="name" name="name" placeholder="字典名称">
+											</div>
+											<label for="name" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">备注</label>
+											<div class="col-sm-8">
+												<textarea class="form-control" rows="3" id="memo" name="memo" placeholder="备注"></textarea>
+											</div>
+											<label for="memo" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group" id="btnAddDiv">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button id="btn_add" type="button" class="btn btn-default"><i class="fa fa-plus"></i>添加选项 </button>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button id="btn_save" type="button" class="btn btn-default"><i class="fa fa-share"></i>提交</button>
+												<button id="btn_return" class="btn btn-default"><i class="fa fa-undo"></i>返回</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../plugins/validation/dist/jquery.validate.js"></script>
+<script src="../../plugins/validation/dist/locales/messages_zh.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../plugins/fastclick/fastclick.min.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../../other/js/html5shiv.min.js"></script>
+<script src="../../other/js/respond.min.js"></script>
+<![endif]-->
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script>
+	$(function(){
+		$(document).ready(function(){
+			$('body').on('click','#btn_remove', function(){
+				$(this).parent().parent().remove();
+			});
+			$('#btn_add').click(function(e){
+				e.preventDefault();
+				addItem('', '', '');
+			});
+		})
+	});
+</script>
+
+<script>
+	var pk = null;
+	var pkColumnName = null;
+	var values = null;
+	
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initUI();
+		initData();
+		initValidate();
+	}
+	
+	function initData() {
+		$.getUrlParam = function (name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) {
+				return unescape(r[2]);
+			}
+			return null;
+		};
+		var urltype = $.getUrlParam('id');
+		
+		pk = urltype;
+		pkColumnName = $.getUrlParam('key');
+		
+		if (isModify()) {
+			$("#code").attr("disabled", true);
+			loadData(pkColumnName, pk);
+		} else {
+			addItem('', '', '');
+		}
+	}
+	
+	function initUI() {
+		$('#btn_return').click(function () {
+//			$('#frameWin', window.parent.document).src = "SystemDictionary.html";
+			var returnHerf = "SystemDictionary.html";
+			window.location.href = returnHerf; 
+			systemUrl(returnHerf);
+		});
+		
+		$('#btn_save').click(function () {
+			doSave();
+		});
+	}
+	
+	function isModify() {
+		return (null != pk && "" != pk);
+	}
+	
+	function loadData(pkColumnName, pk) {
+		var query = {};
+		query.code = pk;
+		
+		Base.ajax({
+			url: serverSrc + "/systemDictionary.do?_method=doSearch2",
+			type: "post",
+			dataType: "json",
+			async: false,
+			data: {
+				_json: JSON.stringify(query)
+			},
+			mysuccess: function(val) {
+				if (JSON.stringify(val) == "{}") {
+					return;
+				}
+				setUIInfo(val);
+			}
+		});
+		
+		var itemQuery = {};
+		itemQuery.dicCode = pk;//$("#code").val();
+		Base.ajax({
+			url: serverSrc + "/systemDictionaryValue.do?_method=doSearch",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(itemQuery)
+			},
+			mysuccess: function(val) {
+				if (JSON.stringify(val) == "{}") {
+					return;
+				}
+				setItems(val);
+			}
+		});
+	}
+	
+	function addItem(dicKey, dicValue, dicMemo) {
+		var itemSeg = '<div class="form-group">'
+					+ '	<label class="col-sm-2 control-label">项目</label>'
+					+ '	<div class="col-sm-6">'
+					+ '		<ul class="tiant">'
+					+ '			<li class="xiang"><span>键码：</span><input type="text" id="dic_key" name="dic_key" value="' + dicKey + '"/></li>'
+					+ '			<li class="xiang"><span>键值：</span><input type="text" id="dic_value" name="dic_value" value="' + dicValue + '"/></li>'
+					+ '			<li class="xiang"><span>备注：</span><input type="text" id="dic_memo" name="dic_memo" value="' + dicMemo + '"/></li>'
+					+ '		</ul>'
+					+ '	</div>'
+					+ '	<div class="col-sm-2">'
+					+ '		<button id="btn_remove" type="button" class="btn btn-default"><i class="fa fa-remove"></i>删除项目</button>'
+					+ '	</div>'
+					+ '	<label for="dic_key" class="col-sm-2 text-red"></label>'
+					+ '</div>';
+		$('#btnAddDiv').before(itemSeg);
+	}
+	
+	function setItems(val) {
+		for (var i = 0; i < val.total; i++) {
+			var item = val.rows[i];
+			addItem(item.itemKey, item.itemValue, item.memo?item.memo:'');
+		}
+	}
+	
+	function setUIInfo(val) {
+		var data = val.rows[0];
+		
+		$("#id").val(data.id).attr("disabled", true);
+		$("#code").val(data.code);
+		$("#name").val(data.name);
+		$("#memo").val(data.memo);
+		$("#createTimeStr").val(data.createTimeStr);
+		$("#createUser").val(data.createUser);
+		$("#updateTimeStr").val(data.updateTimeStr);
+		$("#updateUser").val(data.updateUser);
+	}
+	
+	function doSave() {
+		if (!$("#form").valid()) {
+			return;
+		}
+		
+		if (!checkValid()) {
+			return;
+		}
+		
+		var dic_items=[];
+		$.each($("input[name='dic_key']"), function(i, val) {
+			var dicItem = {};
+			dicItem.dicCode = $("#code").val();
+			dicItem.itemKey = val.value;
+			dicItem.sortNum = dic_items.length+1;
+			dic_items.push(dicItem);
+		});
+		$.each($("input[name='dic_value']"), function(i, val) {
+			dic_items[i].itemValue = val.value;
+		});
+		$.each($("input[name='dic_memo']"), function(i, val) {
+			dic_items[i].memo = val.value;
+		});
+		
+		var addJson = {
+			"id": $("#id").val(),
+			"code": $("#code").val(),
+			"name": $("#name").val(),
+			"memo": $("#memo").val(),
+			"createTimeStr": $("#createTimeStr").val(),
+			"createUser": $("#createUser").val(),
+			"dicItems": dic_items
+		};
+		ajax(addJson);
+	}
+	
+	function ajax(obj) {
+		var url = serverSrc + "/systemDictionary.do?_method=insert";
+		if (isModify()) {
+			url = serverSrc + "/systemDictionary.do?_method=update";
+		}
+		var data = obj;
+		
+		Base.ajax({
+			url: url,
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(data)
+			},
+			mysuccess: function(data) {
+				var count = data.count;
+				if (count == 0) {
+					$.messager.alert("提示", data.message.message);
+				} else {
+					$.messager.alert("提示", getMessage("MSG_COMMON_I0005", "保存"));
+				}
+			}
+		});
+	}
+	
+	function checkValid() {
+//		var id = $("#id").val();
+//		if ("" == id.trim()) {
+//			$.messager.alert("提示", getMessage('MSG_COMMON_I0003', "ID"));
+//			return false;
+//		}
+		
+		return true;
+	}
+	
+	var validator;
+	function initValidate() {
+		validator = $("#form").validate({
+			debug: true,//不提交表单
+			rules: {
+				id: {
+					required: true,
+				},
+				code: {
+					required: true,
+					maxlength: 45
+				},
+				name: {
+					required: true,
+					maxlength: 256
+				},
+				memo: {
+					maxlength: 1024
+				},
+				createUser: {
+					maxlength: 45
+				},
+				updateUser: {
+					maxlength: 45
+				}
+			},
+			errorPlacement: function(error, element) {
+				// Append error within linked label
+				$(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
+			},
+			errorElement: "span"
+		});
+	}
+</script>
+</html>

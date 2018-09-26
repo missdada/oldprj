@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<searchDetail id="tcx_user_search">
+	<search display="true" labelWidth="100px" controlWidth="120px">
+		<searchField id="user_id" name="user_id" dbColumnName="user_id" caption="用户编码:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="true" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField id="name" name="name" dbColumnName="name" caption="用户名称:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField display="false" id="password" name="password" dbColumnName="password" caption="密码:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField selectType="true" masterCode="sex" masterDataCode="dictdata_name" masterDataValue="dictdata_value" masterFirstBlank="true" id="department" name="department" dbColumnName="department" caption="部门:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="200px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField id="phone" name="phone" dbColumnName="phone" caption="电话:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField id="email" name="email" dbColumnName="email" caption="邮件:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField display="false" id="remark" name="remark" dbColumnName="remark" caption="备注:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField display="false" id="create_time__from" name="create_time__from" dbColumnName="create_time" caption="创建时间(&gt;=):" control="input" style="easyui-datebox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="&gt;=" operatorOpen="" operatorClose=""></searchField>
+		<searchField display="false" id="create_time__to" name="create_time__to" dbColumnName="create_time" caption="创建时间(&lt;=):" control="input" style="easyui-datebox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="&lt;=" operatorOpen="" operatorClose=""></searchField>
+		<searchField display="false" id="creator" name="creator" dbColumnName="creator" caption="创建人:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+		<searchField display="false" id="update_time__from" name="update_time__from" dbColumnName="update_time" caption="更新时间(&gt;=):" control="input" style="easyui-datebox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="&gt;=" operatorOpen="" operatorClose=""></searchField>
+		<searchField display="false" id="update_time__to" name="update_time__to" dbColumnName="update_time" caption="更新时间(&lt;=):" control="input" style="easyui-datebox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="&lt;=" operatorOpen="" operatorClose=""></searchField>
+		<searchField display="false" id="updater" name="updater" dbColumnName="updater" caption="更新人:" control="input" style="easyui-textbox" type="textbox" required="false" value="" width="120px" primaryKey="false" operator="like" operatorOpen="%" operatorClose="%"></searchField>
+	</search>
+	
+	<toolBar display="true">
+		<toolButton id="addBtn" name="addBtn" caption="新建" style="easyui-linkbutton" scope="all" iconCls="icon-add" para="tcx_user" onclick="doNew();"></toolButton>
+		<toolButton id="editBtn" name="editBtn" caption="修改" style="easyui-linkbutton" scope="single" iconCls="icon-edit" para="tcx_user" onclick="doEdit();"></toolButton>
+		<toolButton id="deleteBtn" name="deleteBtn" caption="删除" style="easyui-linkbutton" scope="single" iconCls="icon-remove" para="tcx_user" onclick="doDelete();"></toolButton>
+		<toolButton id="viewBtn" name="viewBtn" caption="查看" style="easyui-linkbutton" scope="single" iconCls="icon-tip" para="tcx_user" onclick="doView();"></toolButton>
+		<toolButton id="confirmBtn" name="confirmBtn" caption="确定" style="easyui-linkbutton" scope="single" iconCls="icon-ok" para="tcx_user" onclick="doConfirm();" display="false"></toolButton>
+		<toolButton id="exportExcelBtn" name="exportExcelBtn" caption="导出" style="easyui-linkbutton" scope="all" iconCls="icon-reload" para="tcx_user" onclick="doExportExcel();" display="false"></toolButton>
+	</toolBar>
+	
+	<listView id="tcx_user_listView" tableid="tcx_user" width="100%" height="245px" checkbox="true" singleSelect="false" fitColumns="true" pageSize="20" pagination="true" showFooter="false" rownumbers="true">
+		<column id="user_id" name="user_id" dbColumnName="user_id" caption="用户编码" width="120px" align="left" valign="center" sortable="true" display="true" primaryKey="true"></column>
+		<column id="name" name="name" dbColumnName="name" caption="用户名称" width="120px" align="left" valign="center" sortable="true" display="true" primaryKey="false" formatter="viewDetail"></column>
+		<column id="password" name="password" dbColumnName="password" caption="密码" width="120px" align="left" valign="center" sortable="true" display="false" primaryKey="false"></column>
+		<column id="department" name="department" dbColumnName="department" caption="部门" width="120px" align="left" valign="center" sortable="true" display="true" primaryKey="false"></column>
+		<column id="phone" name="phone" dbColumnName="phone" caption="电话" width="120px" align="left" valign="center" sortable="true" display="true" primaryKey="false"></column>
+		<column id="email" name="email" dbColumnName="email" caption="邮件" width="120px" align="left" valign="center" sortable="true" display="true" primaryKey="false"></column>
+		<column id="remark" name="remark" dbColumnName="remark" caption="备注" width="120px" align="left" valign="center" sortable="true" display="true" primaryKey="false"></column>
+		<column id="create_time" name="create_time" dbColumnName="create_time" caption="创建时间" width="120px" align="left" valign="center" sortable="true" display="false" primaryKey="false"></column>
+		<column id="creator" name="creator" dbColumnName="creator" caption="创建人" width="120px" align="left" valign="center" sortable="true" display="false" primaryKey="false"></column>
+		<column id="update_time" name="update_time" dbColumnName="update_time" caption="更新时间" width="120px" align="left" valign="center" sortable="true" display="false" primaryKey="false"></column>
+		<column id="updater" name="updater" dbColumnName="updater" caption="更新人" width="120px" align="left" valign="center" sortable="true" display="false" primaryKey="false"></column>
+	</listView>
+</searchDetail>

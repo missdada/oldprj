@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.common.dao.entity.mapper.ISystemDictionaryMapper">
+	<resultMap id="SystemDictionaryEntityResult" type="manytag.common.dao.entity.SystemDictionaryEntity">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="delete_flag" property="deleteFlag" jdbcType="VARCHAR" />
+		<result column="delete_flag_str" property="deleteFlagStr" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.common.dao.entity.SystemDictionarySearchEntity" resultMap="SystemDictionaryEntityResult">
+		select
+			id,
+			code,
+			name,
+			memo,
+			delete_flag,
+			(select item_value from system_dictionary_value where dic_code='yes_no' and system_dictionary_value.item_key=system_dictionary.delete_flag) as delete_flag_str,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_dictionary
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="searchAll" resultMap="SystemDictionaryEntityResult">
+		select
+			id,
+			code,
+			name,
+			memo,
+			delete_flag,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_dictionary
+	</select>
+
+	<select id="search" parameterType="manytag.common.dao.entity.SystemDictionarySearchEntity" resultMap="SystemDictionaryEntityResult">
+		select
+			id,
+			code,
+			name,
+			memo,
+			delete_flag,
+			(select item_value from system_dictionary_value where dic_code='yes_no' and system_dictionary_value.item_key=system_dictionary.delete_flag) as delete_flag_str,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_dictionary
+		<trim prefix="where" prefixOverrides="and">
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="code != null and code != ''">
+				and code like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag like CONCAT('%', #{deleteFlag,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+	
+	<select id="searchAccurate" parameterType="manytag.common.dao.entity.SystemDictionarySearchEntity" resultMap="SystemDictionaryEntityResult">
+		select
+			id,
+			code,
+			name,
+			memo,
+			delete_flag,
+			(select item_value from system_dictionary_value where dic_code='yes_no' and system_dictionary_value.item_key=system_dictionary.delete_flag) as delete_flag_str,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_dictionary
+		<trim prefix="where" prefixOverrides="and">
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag = #{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+	
+	<select id="searchCount" parameterType="manytag.common.dao.entity.SystemDictionarySearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from system_dictionary
+		<trim prefix="where" prefixOverrides="and">
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="code != null and code != ''">
+				and code like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag like CONCAT('%', #{deleteFlag,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="SystemDictionaryEntityResult">
+		select
+			id,
+			code,
+			name,
+			memo,
+			delete_flag,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_dictionary
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from system_dictionary
+	</select>
+
+	<delete id="delete" parameterType="manytag.common.dao.entity.SystemDictionaryEntity">
+		delete from system_dictionary
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from system_dictionary
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(id = #{entity.id,jdbcType=INTEGER})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.common.dao.entity.SystemDictionaryEntity">
+		delete from system_dictionary
+		<trim prefix="where" prefixOverrides="and">
+			<if test="id != null">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag = #{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.common.dao.entity.SystemDictionaryEntity">
+		insert into system_dictionary
+		(
+			id
+			,code
+			,name
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+			,delete_flag
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{id,jdbcType=INTEGER}
+			,#{code,jdbcType=VARCHAR}
+			,#{name,jdbcType=VARCHAR}
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+			,#{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.common.dao.entity.SystemDictionaryEntity">
+		update system_dictionary
+		set id = #{id,jdbcType=INTEGER}
+			,code = #{code,jdbcType=VARCHAR}
+			,name = #{name,jdbcType=VARCHAR}
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+			,delete_flag = #{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

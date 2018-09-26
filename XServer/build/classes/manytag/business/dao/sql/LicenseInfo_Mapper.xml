@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.business.dao.entity.mapper.ILicenseInfoMapper">
+	<resultMap id="LicenseInfoEntityResult" type="manytag.business.dao.entity.LicenseInfoEntity">
+		<result column="uid" property="uid" jdbcType="VARCHAR" />
+		<result column="license_trial_flag" property="licenseTrialFlag" jdbcType="VARCHAR" />
+		<result column="license_trial_flag_str" property="licenseTrialFlagStr" jdbcType="VARCHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_name_str" property="productNameStr" jdbcType="VARCHAR" />
+		<result column="product_version" property="productVersion" jdbcType="VARCHAR" />
+		<result column="product_version_str" property="productVersionStr" jdbcType="VARCHAR" />
+		<result column="mac" property="mac" jdbcType="VARCHAR" />
+		<result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+		<result column="contract_images_uid" property="contractImagesUid" jdbcType="VARCHAR" />
+		<result column="request_sheet_file_uid" property="requestSheetFileUid" jdbcType="VARCHAR" />
+		<result column="install_valid_date" property="installValidDate" jdbcType="INTEGER" />
+		<result column="trial_days" property="trialDays" jdbcType="INTEGER" />
+		<result column="trial_days_str" property="trialDaysStr" jdbcType="VARCHAR" />
+		<result column="license_code" property="licenseCode" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="isEffect" property="isEffect" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.business.dao.entity.LicenseInfoSearchEntity" resultMap="LicenseInfoEntityResult">
+		select
+			uid,
+			license_trial_flag,
+			(select item_value from system_dictionary_value where dic_code='license_trial_flag' and system_dictionary_value.item_key=license_info.license_trial_flag) as license_trial_flag_str
+			,
+			product_name,
+			(select item_value from system_dictionary_value where dic_code='product_name' and system_dictionary_value.item_key=license_info.product_name) as product_name_str
+			,
+			product_version,
+			(select item_value from system_dictionary_value where dic_code='product_version' and system_dictionary_value.item_key=license_info.product_version) as product_version_str
+			,
+			mac,
+			customer_name,
+			contract_images_uid,
+			request_sheet_file_uid,
+			install_valid_date,
+			trial_days,
+			(select item_value from system_dictionary_value where dic_code='trial_days' and system_dictionary_value.item_key=license_info.trial_days) as trial_days_str
+			,
+			license_code,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from license_info
+		where uid = #{uid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchAll" resultMap="LicenseInfoEntityResult">
+		select
+			uid,
+			license_trial_flag,
+			product_name,
+			product_version,
+			mac,
+			customer_name,
+			contract_images_uid,
+			request_sheet_file_uid,
+			install_valid_date,
+			trial_days,
+			license_code,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from license_info
+	</select>
+
+	<select id="search" parameterType="manytag.business.dao.entity.LicenseInfoSearchEntity" resultMap="LicenseInfoEntityResult">
+		select
+			uid,
+			license_trial_flag,
+			(select item_value from system_dictionary_value where dic_code='license_trial_flag' and system_dictionary_value.item_key=license_info.license_trial_flag) as license_trial_flag_str
+			,
+			product_name,
+			(select item_value from system_dictionary_value where dic_code='product_name' and system_dictionary_value.item_key=license_info.product_name) as product_name_str
+			,
+			product_version,
+			(select item_value from system_dictionary_value where dic_code='product_version' and system_dictionary_value.item_key=license_info.product_version) as product_version_str
+			,
+			mac,
+			customer_name,
+			contract_images_uid,
+			request_sheet_file_uid,
+			install_valid_date,
+			trial_days,
+			(select item_value from system_dictionary_value where dic_code='trial_days' and system_dictionary_value.item_key=license_info.trial_days) as trial_days_str
+			,
+			license_code,
+			memo,
+			isEffect,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from license_info
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="licenseTrialFlag != null and licenseTrialFlag != ''">
+				and license_trial_flag like CONCAT('%', #{licenseTrialFlag,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="productName != null and productName != ''">
+				and product_name like CONCAT('%', #{productName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="productVersion != null and productVersion != ''">
+				and product_version like CONCAT('%', #{productVersion,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="mac != null and mac != ''">
+				and mac like CONCAT('%', #{mac,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="customerName != null and customerName != ''">
+				and customer_name like CONCAT('%', #{customerName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="contractImagesUid != null and contractImagesUid != ''">
+				and contract_images_uid like CONCAT('%', #{contractImagesUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="requestSheetFileUid != null and requestSheetFileUid != ''">
+				and request_sheet_file_uid like CONCAT('%', #{requestSheetFileUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="installValidDateSearchBegin != null">
+				and install_valid_date &gt;= #{installValidDateSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="installValidDateSearchEnd != null">
+				and install_valid_date &lt;= #{installValidDateSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="trialDaysSearchBegin != null">
+				and trial_days &gt;= #{trialDaysSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="trialDaysSearchEnd != null">
+				and trial_days &lt;= #{trialDaysSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="licenseCode != null and licenseCode != ''">
+				and license_code like CONCAT('%', #{licenseCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.business.dao.entity.LicenseInfoSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from license_info
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="licenseTrialFlag != null and licenseTrialFlag != ''">
+				and license_trial_flag like CONCAT('%', #{licenseTrialFlag,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="productName != null and productName != ''">
+				and product_name like CONCAT('%', #{productName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="productVersion != null and productVersion != ''">
+				and product_version like CONCAT('%', #{productVersion,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="mac != null and mac != ''">
+				and mac like CONCAT('%', #{mac,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="customerName != null and customerName != ''">
+				and customer_name like CONCAT('%', #{customerName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="contractImagesUid != null and contractImagesUid != ''">
+				and contract_images_uid like CONCAT('%', #{contractImagesUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="requestSheetFileUid != null and requestSheetFileUid != ''">
+				and request_sheet_file_uid like CONCAT('%', #{requestSheetFileUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="installValidDateSearchBegin != null">
+				and install_valid_date &gt;= #{installValidDateSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="installValidDateSearchEnd != null">
+				and install_valid_date &lt;= #{installValidDateSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="trialDaysSearchBegin != null">
+				and trial_days &gt;= #{trialDaysSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="trialDaysSearchEnd != null">
+				and trial_days &lt;= #{trialDaysSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="licenseCode != null and licenseCode != ''">
+				and license_code like CONCAT('%', #{licenseCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="LicenseInfoEntityResult">
+		select
+			uid,
+			license_trial_flag,
+			product_name,
+			product_version,
+			mac,
+			customer_name,
+			contract_images_uid,
+			request_sheet_file_uid,
+			install_valid_date,
+			trial_days,
+			license_code,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from license_info
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from license_info
+	</select>
+
+	<delete id="delete" parameterType="manytag.business.dao.entity.LicenseInfoEntity">
+		delete from license_info 
+		where uid = #{uid,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from license_info
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(uid = #{entity.uid,jdbcType=VARCHAR})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.business.dao.entity.LicenseInfoEntity">
+		delete from license_info
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid = #{uid,jdbcType=VARCHAR}
+			</if>
+			<if test="licenseTrialFlag != null and licenseTrialFlag != ''">
+				and license_trial_flag = #{licenseTrialFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="productName != null and productName != ''">
+				and product_name = #{productName,jdbcType=VARCHAR}
+			</if>
+			<if test="productVersion != null and productVersion != ''">
+				and product_version = #{productVersion,jdbcType=VARCHAR}
+			</if>
+			<if test="mac != null and mac != ''">
+				and mac = #{mac,jdbcType=VARCHAR}
+			</if>
+			<if test="customerName != null and customerName != ''">
+				and customer_name = #{customerName,jdbcType=VARCHAR}
+			</if>
+			<if test="contractImagesUid != null and contractImagesUid != ''">
+				and contract_images_uid = #{contractImagesUid,jdbcType=VARCHAR}
+			</if>
+			<if test="requestSheetFileUid != null and requestSheetFileUid != ''">
+				and request_sheet_file_uid = #{requestSheetFileUid,jdbcType=VARCHAR}
+			</if>
+			<if test="installValidDate != null">
+				and install_valid_date = #{installValidDate,jdbcType=INTEGER}
+			</if>
+			<if test="trialDays != null">
+				and trial_days = #{trialDays,jdbcType=INTEGER}
+			</if>
+			<if test="licenseCode != null and licenseCode != ''">
+				and license_code = #{licenseCode,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.business.dao.entity.LicenseInfoEntity">
+		insert into license_info
+		(
+			uid
+			,license_trial_flag
+			,product_name
+			,product_version
+			<if test="mac != null and mac != ''">
+			,mac
+			</if>
+			,customer_name
+			<if test="contractImagesUid != null and contractImagesUid != ''">
+			,contract_images_uid
+			</if>
+			,request_sheet_file_uid
+			<if test="installValidDate != null and installValidDate != ''">
+			,install_valid_date
+			</if>
+			<if test="trialDays != null and trialDays != ''">
+			,trial_days
+			</if>
+			<if test="licenseCode != null and licenseCode != ''">
+			,license_code
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="isEffect != null and isEffect != ''">
+			,isEffect
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{uid,jdbcType=VARCHAR}
+			,#{licenseTrialFlag,jdbcType=VARCHAR}
+			,#{productName,jdbcType=VARCHAR}
+			,#{productVersion,jdbcType=VARCHAR}
+			<if test="mac != null and mac != ''">
+			,#{mac,jdbcType=VARCHAR}
+			</if>
+			,#{customerName,jdbcType=VARCHAR}
+			<if test="contractImagesUid != null and contractImagesUid != ''">
+			,#{contractImagesUid,jdbcType=VARCHAR}
+			</if>
+			,#{requestSheetFileUid,jdbcType=VARCHAR}
+			<if test="installValidDate != null and installValidDate != ''">
+			,#{installValidDate,jdbcType=INTEGER}
+			</if>
+			<if test="trialDays != null and trialDays != ''">
+			,#{trialDays,jdbcType=INTEGER}
+			</if>
+			<if test="licenseCode != null and licenseCode != ''">
+			,#{licenseCode,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="isEffect != null and isEffect != ''">
+			,#{isEffect,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.business.dao.entity.LicenseInfoEntity">
+		update license_info set
+			uid = #{uid,jdbcType=VARCHAR}
+			,license_trial_flag = #{licenseTrialFlag,jdbcType=VARCHAR}
+			,product_name = #{productName,jdbcType=VARCHAR}
+			,product_version = #{productVersion,jdbcType=VARCHAR}
+			<if test="mac != null and mac != ''">
+			,mac = #{mac,jdbcType=VARCHAR}
+			</if>
+			,customer_name = #{customerName,jdbcType=VARCHAR}
+			<if test="contractImagesUid != null and contractImagesUid != ''">
+			,contract_images_uid = #{contractImagesUid,jdbcType=VARCHAR}
+			</if>
+			,request_sheet_file_uid = #{requestSheetFileUid,jdbcType=VARCHAR}
+			<if test="installValidDate != null and installValidDate != ''">
+			,install_valid_date = #{installValidDate,jdbcType=INTEGER}
+			</if>
+			<if test="trialDays != null and trialDays != ''">
+			,trial_days = #{trialDays,jdbcType=INTEGER}
+			</if>
+			<if test="licenseCode != null and licenseCode != ''">
+			,license_code = #{licenseCode,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="isEffect != null and isEffect != ''">
+			,isEffect = #{isEffect,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where uid = #{uid,jdbcType=VARCHAR}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

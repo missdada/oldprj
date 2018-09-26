@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+	<meta charset="UTF-8">
+	<title>树形控件</title>
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="../../bootstrap-table/bootstrap-table.css" />
+	<link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="../../plugins/ztree/zTreeStyle.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>系统管理	<small>菜单管理</small></h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+					<li><a href="#">系统管理</a></li>
+					<li class="active">菜单管理</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-xs-3">
+						<div class="box box-danger">
+							<div class="box-header with-border">
+								<h3 class="box-title" id="crrentMenuName">菜单</h3>
+							</div>
+							<div class="box-body">
+								<ul class="ztree" id="menuTree"></ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-9">
+						<div class="box box-danger">
+							<div class="box-header with-border">
+								<h3 class="box-title">设置</h3>
+							</div>
+							<form class="form-horizontal">
+								<div class="box-body">
+									<div class="form-group">
+										<label class="col-sm-2 control-label" for="menu_parent">父菜单：</label>
+										<div class="col-sm-6">
+											<input class="form-control" id="menu_parent" placeholder="父菜单" disabled>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="menu_name" class="col-sm-2 control-label">菜单名：</label>
+										<div class="col-sm-6">
+											<input class="form-control" id="menu_name" placeholder="菜单名称" disabled>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="menu_id" class="col-sm-2 control-label">菜单id：</label>
+										<div class="col-sm-6">
+											<input class="form-control" id="menu_id" placeholder="菜单id" disabled>
+											<input type="hidden" class="form-control" id="menu_tid" placeholder="菜单tid" disabled>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="menu_type" class="col-sm-2 control-label">类型：</label>
+										<div class="col-sm-6">
+											<select class="form-control select2" id="menu_type" name="menu_type" style="width: 100%;" disabled>
+												<option value="menu_type_0">菜单</option>
+												<option value="menu_type_1">页面</option>
+												<option value="menu_type_2">功能</option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group" id="menu_url_div">
+										<label for="menu_url" class="col-sm-2 control-label">页面路径：</label>
+										<div class="col-sm-6">
+											<input class="form-control" id="menu_url" placeholder="页面路径" disabled>
+										</div>
+									</div>
+									<div class="form-group" id="menu_actionid_div">
+										<label for="menu_actionid" class="col-sm-2 control-label">功能ID：</label>
+										<div class="col-sm-6">
+											<input class="form-control" id="menu_actionid" placeholder="功能ID" disabled>
+										</div>
+									</div>
+									<div class="form-group" id="menu_action_div">
+										<label for="menu_action" class="col-sm-2 control-label">功能路径：</label>
+										<div class="col-sm-6">
+											<input class="form-control" id="menu_action" placeholder="功能路径" disabled>
+										</div>
+									</div>
+								</div>
+								<div class="box-footer">
+									<!-- 
+									<a class="btn btn-info" onclick="setMenu();" id="menu_edit_ok" style="display:none">确定</a>
+									 -->
+									<div class="box-tools col-sm-offset-2">
+										<a class="btn btn-default" href="javascript:void(0)" onclick="editTreeNode()"><i class="fa fa-edit"></i>编辑</a>
+										<a class="btn btn-default" href="javascript:void(0)" onclick="addMenu()"><i class="fa fa-file-o"></i>添加</a>
+										<a class="btn btn-danger" href="javascript:void(0)" onclick="removeMenu()"><i class="fa fa-trash"></i>删除</a>
+											&nbsp;|&nbsp;
+										<a class="btn btn-default" href="javascript:void(0)" onclick="doSave()"><i class="fa fa-save"></i>保存</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../bootstrap-table/bootstrap-table.js"></script>
+<script src="../../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all-3.5.min.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<script>
+	$(function() {
+		init();
+	});
+	
+	function init() {
+		initData();
+		initUI();
+	}
+	
+	function initData() {
+		getTree();
+	}
+	
+	function initUI() {
+		bondMenuType();
+	}
+	
+	window.actionEvents = {
+		'click .resend': function(e, value, row, index) {
+			alert('重新发送该, row: ' + JSON.stringify(row));
+		}
+	};
+	
+	function bondMenuType() {
+		$('#menu_type').change(function() {
+			var v = this.value;
+			if (v == 'menu_type_0') {
+				$('#menu_url').val('#').attr({readonly: 'true'});
+				$('#menu_action').attr({readonly: 'true'});
+				$('#menu_actionid').attr({readonly: 'true'});
+			} else if (v == 'menu_type_2') {
+				$('#menu_url').val('@').attr({readonly: 'true'});
+				$('#menu_action').removeAttr('readonly');
+				$('#menu_actionid').removeAttr('readonly');
+			} else {
+				$('#menu_url').removeAttr('readonly');
+				$('#menu_action').attr({readonly: 'true'});
+				$('#menu_actionid').attr({readonly: 'true'});
+			}
+		});
+	}
+	
+	function getTree() {
+		var setting = {
+			edit: {
+				enable: true,
+				showRemoveBtn: false,
+				showRenameBtn: false
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "function_id",
+					pIdKey: "parent_id"
+				},
+				key: {
+					checked: "checked",
+					name: "name"
+				}
+			},
+			callback: {
+				onClick: zTreeOnClick,
+				beforeDrag: beforeDrag,
+				beforeDrop: beforeDrop,
+				onDrop: zTreeOnDrop
+			}
+		};
+		
+		Base.ajax({
+			url: serverSrc + "/menu.do?_method=sysMenuSearchMenuTree",
+			type: 'post',
+			dataType: 'json',
+			mysuccess: function(data) {
+				var zNodes = data.menuArray;
+				var treeObject = $.fn.zTree.init($("#menuTree"), setting, zNodes); //生成树形结构
+				treeObject.expandAll(true);
+			},
+			error: function(msg) {
+				alert("菜单加载异常");
+			}
+		});
+	}
+	
+	function beforeDrag(treeId, treeNodes) {
+		for (var i = 0, l = treeNodes.length; i < l; i++) {
+			if (treeNodes[i].menu_url === '@') {//功能按钮不能拖动
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	function beforeDrop(treeId, treeNodes, targetNode, moveType) {
+		for (var i = 0, l = treeNodes.length; i < l; i++) {
+			if (moveType == 'prev') {//做兄弟
+				if (targetNode.menu_url != '@') {//目标不是按钮，就可以
+					return true;
+				}
+			} else if (moveType == 'inner') {//做孩子
+				if (targetNode.menu_url == '#' || targetNode.menu_url == '*') {//目标只能是菜单或者root，就可以
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	function zTreeOnDrop(event, treeId, treeNodes, targetNode, moveType) {
+		doSave();
+	}
+	
+	function zTreeOnClick(event, treeId, treeNode) {
+		disableTreeNode();
+		var menu_tid = treeNode.tId;
+		var menu_id = treeNode.function_id;
+		var menu_name = treeNode.name;
+		var menu_url = treeNode.menu_url;
+		var menu_type = treeNode.menu_type;
+		var menu_action = treeNode.menu_action;
+		var menu_actionid = treeNode.menu_actionid;
+		var tId = treeNode.parentTId;
+		var treeObject = $.fn.zTree.getZTreeObj("menuTree");
+		var menu_parent = treeObject.getNodeByTId(tId).name;
+		
+		$('#menu_tid').val(menu_tid);
+		$('#menu_parent').val(menu_parent);
+		$('#menu_name').val(menu_name);
+		$('#menu_id').val(menu_id);
+		$('#menu_url').val(menu_url);
+		if (menu_url == '#') {
+			$('#menu_type').val('menu_type_0');
+			$('#menu_url').attr({readonly: 'true'});
+		} else if (menu_url == '@') {
+			$('#menu_type').val('menu_type_2');
+			$('#menu_url').attr({readonly: 'true'});
+		} else {
+			$('#menu_type').val('menu_type_1');
+			$('#menu_url').removeAttr('readonly');
+		}
+		$('#menu_action').val(menu_action);
+		$('#menu_actionid').val(menu_actionid);
+	}
+	
+	function editTreeNode() {
+		$('#menu_id').removeAttr('disabled');
+		$('#menu_name').removeAttr('disabled');
+		$('#menu_type').removeAttr('disabled');
+		$('#menu_url').removeAttr('disabled');
+		$('#menu_action').removeAttr('disabled');
+		$('#menu_actionid').removeAttr('disabled');
+		$('#menu_edit_ok').show();
+	}
+	
+	function disableTreeNode() {
+		$('#menu_id').attr({disabled: 'true'});
+		$('#menu_name').attr({disabled: 'true'});
+		$('#menu_type').attr({disabled: 'true'});
+		$('#menu_url').attr({disabled: 'true'});
+		$('#menu_action').attr({disabled: 'true'});
+		$('#menu_actionid').attr({disabled: 'true'});
+		$('#menu_edit_ok').hide();
+	}
+	
+	function setMenu() {
+		var menu_tid = $('#menu_tid').val();
+		var menu_name = $('#menu_name').val();
+		var menu_id = $('#menu_id').val();
+		var menu_url = $('#menu_url').val();
+		var menu_action = $('#menu_action').val();
+		var menu_actionid = $('#menu_actionid').val();
+		
+		var treeObject = $.fn.zTree.getZTreeObj("menuTree");
+		var node = treeObject.getNodeByTId(menu_tid);
+		if (node) {
+			node.name = menu_name;
+			node.function_id = menu_id;
+			node.menu_url = menu_url;
+			node.menu_action = menu_action;
+			node.menu_actionid = menu_actionid;
+		}
+		treeObject.updateNode(node);
+	}
+	
+	function addMenu() {
+		var treeObject = $.fn.zTree.getZTreeObj("menuTree");
+		var parentMenu = treeObject.getSelectedNodes();
+		if (parentMenu.length == 0) {
+			alert('请选择一个菜单');
+			return;
+		}
+		var pnode = parentMenu[0];
+		if (pnode) {
+			var cnode = {function_id: pnode.function_id + "_1", parent_id: pnode.function_id, name: "new node", menu_type: 'menu'}
+			treeObject.addNodes(pnode, cnode);
+		}
+	}
+	
+	function removeMenu() {
+		var treeObject = $.fn.zTree.getZTreeObj("menuTree");
+		var parentMenu = treeObject.getSelectedNodes();
+		if (parentMenu.length == 0) {
+			alert('请选择一个菜单');
+			return;
+		}
+		var pnode = parentMenu[0];
+		if (pnode) {
+			if (confirm("确定要删除菜单吗？")) {
+				treeObject.removeNode(pnode);
+			}
+		}
+	}
+	
+	var savedMenu = [];
+	var menusort = 1;
+	function doSave() {
+		setMenu();
+		var treeObject = $.fn.zTree.getZTreeObj("menuTree");
+		var nodes = treeObject.getNodes();
+		if (nodes[0].children) {
+			savedMenu = [];
+			menusort = 1;
+			var menuc = nodes[0].children;
+			for (var i = 0; i < menuc.length; i++) {
+				var menu = menuc[i];
+				saveThisMenu(menu);
+			}
+			//return;
+			var param = {};
+			param.menuinfo = savedMenu;
+			Base.ajax({
+				url: serverSrc + "/menu.do?_method=sysMenuSave",
+				type: 'post',
+				dataType: 'json',
+				data: {
+					_json: JSON.stringify(param)
+				},
+				mysuccess: function(resp) {
+					if (resp && resp.message) {
+						var msgInfo = resp.message;
+						if (msgInfo.messageId == 'I0003') {
+// 							$.messager.alert("提示", msgInfo.message);
+							window.location.href = "setSysMenu.html";
+							getTree();
+						}
+					}
+				}
+			});
+		}
+	}
+	
+	function saveThisMenu(tmenu) {
+		if (tmenu) {
+			var sm = {};
+			sm.function_id = tmenu.function_id;
+			sm.name = tmenu.name;
+			sm.menu_type = tmenu.menu_type;
+			sm.url = tmenu.menu_url;
+			sm.menu_action = tmenu.menu_action;
+			sm.menu_actionid = tmenu.menu_actionid;
+			
+			menusort += 1;
+			
+			sm.group_by = menusort + '';
+			sm.sort_num = sm.group_by;
+			sm.parent_id = tmenu.parent_id;
+			sm.icon = 'fa fa-sun-o';
+			savedMenu.push(sm);
+			if (tmenu.children) {
+				for (var y = 0; y < tmenu.children.length; y++) {
+					saveThisMenu(tmenu.children[y]);
+				}
+			}
+		}
+	}
+</script>
+</html>

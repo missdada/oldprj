@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.business.dao.entity.mapper.ICGoodsInfoMapper">
+	<resultMap id="CGoodsInfoEntityResult" type="manytag.business.dao.entity.CGoodsInfoEntity">
+		<result column="uid" property="uid" jdbcType="VARCHAR" />
+		<result column="goods_num" property="goodsNum" jdbcType="VARCHAR" />
+		<result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+		<result column="type1" property="type1" jdbcType="VARCHAR" />
+		<result column="type1_str" property="type1Str" jdbcType="VARCHAR" />
+		<result column="type2" property="type2" jdbcType="VARCHAR" />
+		<result column="type2_str" property="type2Str" jdbcType="VARCHAR" />
+		<result column="type3" property="type3" jdbcType="VARCHAR" />
+		<result column="type3_str" property="type3Str" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="FLOAT" />
+		<result column="discount_price" property="discountPrice" jdbcType="FLOAT" />
+		<result column="barcode" property="barcode" jdbcType="VARCHAR" />
+		<result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+		<result column="manufacturer_str" property="manufacturerStr" jdbcType="VARCHAR" />
+		<result column="images_uid" property="imagesUid" jdbcType="VARCHAR" />
+		<result column="license_file_uid" property="licenseFileUid" jdbcType="VARCHAR" />
+		<result column="weight" property="weight" jdbcType="DOUBLE" />
+		<result column="made_in" property="madeIn" jdbcType="VARCHAR" />
+		<result column="made_in_str" property="madeInStr" jdbcType="VARCHAR" />
+		<result column="made_date" property="madeDate" jdbcType="DATE" />
+		<result column="delete_flag" property="deleteFlag" jdbcType="VARCHAR" />
+		<result column="delete_flag_str" property="deleteFlagStr" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.business.dao.entity.CGoodsInfoSearchEntity" resultMap="CGoodsInfoEntityResult">
+		select
+			uid,
+			goods_num,
+			goods_name,
+			type1,
+			(select name from c_type_info t where t.code=c_goods_info.type1) as type1_str
+			,
+			type2,
+			(select name from c_type_info t where t.code=c_goods_info.type2) as type2_str
+			,
+			type3,
+			(select name from c_type_info t where t.code=c_goods_info.type3) as type3_str
+			,
+			price,
+			discount_price,
+			barcode,
+			manufacturer,
+			(select name from c_manufacturer_info t where t.code=c_goods_info.manufacturer) as manufacturer_str
+			,
+			images_uid,
+			license_file_uid,
+			weight,
+			made_in,
+			(select item_value from system_dictionary_value where dic_code='made_in' and system_dictionary_value.item_key=c_goods_info.made_in) as made_in_str
+			,
+			made_date,
+			delete_flag,
+			(select item_value from system_dictionary_value where dic_code='yes_no' and system_dictionary_value.item_key=c_goods_info.delete_flag) as delete_flag_str
+			,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from c_goods_info
+		where uid = #{uid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchAll" resultMap="CGoodsInfoEntityResult">
+		select
+			uid,
+			goods_num,
+			goods_name,
+			type1,
+			type2,
+			type3,
+			price,
+			discount_price,
+			barcode,
+			manufacturer,
+			images_uid,
+			license_file_uid,
+			weight,
+			made_in,
+			made_date,
+			delete_flag,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from c_goods_info
+	</select>
+
+	<select id="search" parameterType="manytag.business.dao.entity.CGoodsInfoSearchEntity" resultMap="CGoodsInfoEntityResult">
+		select
+			uid,
+			goods_num,
+			goods_name,
+			type1,
+			(select name from c_type_info t where t.code=c_goods_info.type1) as type1_str
+			,
+			type2,
+			(select name from c_type_info t where t.code=c_goods_info.type2) as type2_str
+			,
+			type3,
+			(select name from c_type_info t where t.code=c_goods_info.type3) as type3_str
+			,
+			price,
+			discount_price,
+			barcode,
+			manufacturer,
+			(select name from c_manufacturer_info t where t.code=c_goods_info.manufacturer) as manufacturer_str
+			,
+			images_uid,
+			license_file_uid,
+			weight,
+			made_in,
+			(select item_value from system_dictionary_value where dic_code='made_in' and system_dictionary_value.item_key=c_goods_info.made_in) as made_in_str
+			,
+			made_date,
+			delete_flag,
+			(select item_value from system_dictionary_value where dic_code='yes_no' and system_dictionary_value.item_key=c_goods_info.delete_flag) as delete_flag_str
+			,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from c_goods_info
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="goodsNum != null and goodsNum != ''">
+				and goods_num like CONCAT('%', #{goodsNum,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				and goods_name like CONCAT('%', #{goodsName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="type1 != null and type1 != ''">
+				and type1 like CONCAT('%', #{type1,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="type2 != null and type2 != ''">
+				and type2 like CONCAT('%', #{type2,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="type3 != null and type3 != ''">
+				and type3 like CONCAT('%', #{type3,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="price != null and price != ''">
+				and price = #{price,jdbcType=FLOAT}
+			</if>
+			<if test="discountPrice != null and discountPrice != ''">
+				and discount_price = #{discountPrice,jdbcType=FLOAT}
+			</if>
+			<if test="barcode != null and barcode != ''">
+				and barcode like CONCAT('%', #{barcode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				and manufacturer like CONCAT('%', #{manufacturer,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="imagesUid != null and imagesUid != ''">
+				and images_uid like CONCAT('%', #{imagesUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="licenseFileUid != null and licenseFileUid != ''">
+				and license_file_uid like CONCAT('%', #{licenseFileUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="weightSearchBegin != null">
+				and weight &gt;= #{weightSearchBegin,jdbcType=DOUBLE}
+			</if>
+			<if test="weightSearchEnd != null">
+				and weight &lt;= #{weightSearchEnd,jdbcType=DOUBLE}
+			</if>
+			<if test="madeIn != null and madeIn != ''">
+				and made_in like CONCAT('%', #{madeIn,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="madeDateSearchBegin != null">
+				and made_date &gt;= #{madeDateSearchBegin,jdbcType=DATE}
+			</if>
+			<if test="madeDateSearchEnd != null">
+				and made_date &lt;= #{madeDateSearchEnd,jdbcType=DATE}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag like CONCAT('%', #{deleteFlag,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset}, #{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.business.dao.entity.CGoodsInfoSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from c_goods_info
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="goodsNum != null and goodsNum != ''">
+				and goods_num like CONCAT('%', #{goodsNum,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				and goods_name like CONCAT('%', #{goodsName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="type1 != null and type1 != ''">
+				and type1 like CONCAT('%', #{type1,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="type2 != null and type2 != ''">
+				and type2 like CONCAT('%', #{type2,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="type3 != null and type3 != ''">
+				and type3 like CONCAT('%', #{type3,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="price != null and price != ''">
+				and price = #{price,jdbcType=FLOAT}
+			</if>
+			<if test="discountPrice != null and discountPrice != ''">
+				and discount_price = #{discountPrice,jdbcType=FLOAT}
+			</if>
+			<if test="barcode != null and barcode != ''">
+				and barcode like CONCAT('%', #{barcode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				and manufacturer like CONCAT('%', #{manufacturer,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="imagesUid != null and imagesUid != ''">
+				and images_uid like CONCAT('%', #{imagesUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="licenseFileUid != null and licenseFileUid != ''">
+				and license_file_uid like CONCAT('%', #{licenseFileUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="weightSearchBegin != null">
+				and weight &gt;= #{weightSearchBegin,jdbcType=DOUBLE}
+			</if>
+			<if test="weightSearchEnd != null">
+				and weight &lt;= #{weightSearchEnd,jdbcType=DOUBLE}
+			</if>
+			<if test="madeIn != null and madeIn != ''">
+				and made_in like CONCAT('%', #{madeIn,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="madeDateSearchBegin != null">
+				and made_date &gt;= #{madeDateSearchBegin,jdbcType=DATE}
+			</if>
+			<if test="madeDateSearchEnd != null">
+				and made_date &lt;= #{madeDateSearchEnd,jdbcType=DATE}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag like CONCAT('%', #{deleteFlag,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="CGoodsInfoEntityResult">
+		select
+			uid,
+			goods_num,
+			goods_name,
+			type1,
+			type2,
+			type3,
+			price,
+			discount_price,
+			barcode,
+			manufacturer,
+			images_uid,
+			license_file_uid,
+			weight,
+			made_in,
+			made_date,
+			delete_flag,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from c_goods_info
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from c_goods_info
+	</select>
+
+	<delete id="delete" parameterType="manytag.business.dao.entity.CGoodsInfoEntity">
+		delete from c_goods_info
+		where uid = #{uid,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from c_goods_info
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(uid = #{entity.uid,jdbcType=VARCHAR})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.business.dao.entity.CGoodsInfoEntity">
+		delete from c_goods_info
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid = #{uid,jdbcType=VARCHAR}
+			</if>
+			<if test="goodsNum != null and goodsNum != ''">
+				and goods_num = #{goodsNum,jdbcType=VARCHAR}
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				and goods_name = #{goodsName,jdbcType=VARCHAR}
+			</if>
+			<if test="type1 != null and type1 != ''">
+				and type1 = #{type1,jdbcType=VARCHAR}
+			</if>
+			<if test="type2 != null and type2 != ''">
+				and type2 = #{type2,jdbcType=VARCHAR}
+			</if>
+			<if test="type3 != null and type3 != ''">
+				and type3 = #{type3,jdbcType=VARCHAR}
+			</if>
+			<if test="price != null and price != ''">
+				and price = #{price,jdbcType=FLOAT}
+			</if>
+			<if test="discountPrice != null and discountPrice != ''">
+				and discount_price = #{discountPrice,jdbcType=FLOAT}
+			</if>
+			<if test="barcode != null and barcode != ''">
+				and barcode = #{barcode,jdbcType=VARCHAR}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+				and manufacturer = #{manufacturer,jdbcType=VARCHAR}
+			</if>
+			<if test="imagesUid != null and imagesUid != ''">
+				and images_uid = #{imagesUid,jdbcType=VARCHAR}
+			</if>
+			<if test="licenseFileUid != null and licenseFileUid != ''">
+				and license_file_uid = #{licenseFileUid,jdbcType=VARCHAR}
+			</if>
+			<if test="weight != null">
+				and weight = #{weight,jdbcType=DOUBLE}
+			</if>
+			<if test="madeIn != null and madeIn != ''">
+				and made_in = #{madeIn,jdbcType=VARCHAR}
+			</if>
+			<if test="madeDate != null">
+				and made_date = #{madeDate,jdbcType=DATE}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+				and delete_flag = #{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.business.dao.entity.CGoodsInfoEntity">
+		insert into c_goods_info
+		(
+			uid
+			,goods_num
+			,goods_name
+			,type1
+			,type2
+			,type3
+			,price
+			<if test="discountPrice != null and discountPrice != ''">
+			,discount_price
+			</if>
+			<if test="barcode != null and barcode != ''">
+			,barcode
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+			,manufacturer
+			</if>
+			,images_uid
+			<if test="licenseFileUid != null and licenseFileUid != ''">
+			,license_file_uid
+			</if>
+			<if test="weight != null and weight != ''">
+			,weight
+			</if>
+			<if test="madeIn != null and madeIn != ''">
+			,made_in
+			</if>
+			<if test="madeDate != null">
+			,made_date
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+			,delete_flag
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{uid,jdbcType=VARCHAR}
+			,#{goodsNum,jdbcType=VARCHAR}
+			,#{goodsName,jdbcType=VARCHAR}
+			,#{type1,jdbcType=VARCHAR}
+			,#{type2,jdbcType=VARCHAR}
+			,#{type3,jdbcType=VARCHAR}
+			,#{price,jdbcType=FLOAT}
+			<if test="discountPrice != null and discountPrice != ''">
+			,#{discountPrice,jdbcType=FLOAT}
+			</if>
+			<if test="barcode != null and barcode != ''">
+			,#{barcode,jdbcType=VARCHAR}
+			</if>
+			<if test="manufacturer != null and manufacturer != ''">
+			,#{manufacturer,jdbcType=VARCHAR}
+			</if>
+			,#{imagesUid,jdbcType=VARCHAR}
+			<if test="licenseFileUid != null and licenseFileUid != ''">
+			,#{licenseFileUid,jdbcType=VARCHAR}
+			</if>
+			<if test="weight != null and weight != ''">
+			,#{weight,jdbcType=DOUBLE}
+			</if>
+			<if test="madeIn != null and madeIn != ''">
+			,#{madeIn,jdbcType=VARCHAR}
+			</if>
+			<if test="madeDate != null">
+			,#{madeDate,jdbcType=DATE}
+			</if>
+			<if test="deleteFlag != null and deleteFlag != ''">
+			,#{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.business.dao.entity.CGoodsInfoEntity">
+		update c_goods_info set
+			uid = #{uid,jdbcType=VARCHAR}
+			,goods_num = #{goodsNum,jdbcType=VARCHAR}
+			,goods_name = #{goodsName,jdbcType=VARCHAR}
+			,type1 = #{type1,jdbcType=VARCHAR}
+			,type2 = #{type2,jdbcType=VARCHAR}
+			,type3 = #{type3,jdbcType=VARCHAR}
+			,price = #{price,jdbcType=FLOAT}
+			<if test="discountPrice != null">
+			,discount_price = #{discountPrice,jdbcType=FLOAT}
+			</if>
+			<if test="barcode != null">
+			,barcode = #{barcode,jdbcType=VARCHAR}
+			</if>
+			<if test="manufacturer != null">
+			,manufacturer = #{manufacturer,jdbcType=VARCHAR}
+			</if>
+			,images_uid = #{imagesUid,jdbcType=VARCHAR}
+			<if test="licenseFileUid != null">
+			,license_file_uid = #{licenseFileUid,jdbcType=VARCHAR}
+			</if>
+			<if test="weight != null">
+			,weight = #{weight,jdbcType=DOUBLE}
+			</if>
+			<if test="madeIn != null">
+			,made_in = #{madeIn,jdbcType=VARCHAR}
+			</if>
+			<if test="madeDate != null">
+			,made_date = #{madeDate,jdbcType=DATE}
+			</if>
+			<if test="deleteFlag != null">
+			,delete_flag = #{deleteFlag,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where uid = #{uid,jdbcType=VARCHAR}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

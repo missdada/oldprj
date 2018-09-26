@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>myTitle</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../other/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../other/css/ionicons.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>菜单管理 </h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-home"></i>首页</a></li>
+					<li>系统管理</li>
+					<li class="active">菜单管理</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-md-9">
+						<div class="nav-tabs-custom">
+							<div class="tab-content">
+								<div class="active tab-pane" id="settings">
+									<form id="form" class="form-horizontal">
+										<div class="form-group" style="display:none">
+											<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>功能ID</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="functionId" name="functionId" placeholder="功能ID">
+											</div>
+											<label for="functionId" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">功能名称</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="name" name="name" placeholder="功能名称">
+											</div>
+											<label for="name" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">类型</label>
+											<div class="col-sm-8">
+												<input type="hidden" class="form-control" id="data_menuType" name="data_menuType" placeholder="类型">
+												<select class="form-control select2" id="menuType" name="menuType" placeholder="类型" style="width: 100%;"></select>
+											</div>
+											<label for="menuType" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">地址</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="url" name="url" placeholder="地址">
+											</div>
+											<label for="url" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">分组</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="groupBy" name="groupBy" placeholder="分组">
+											</div>
+											<label for="groupBy" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">顺序</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="sortNum" name="sortNum" placeholder="顺序">
+											</div>
+											<label for="sortNum" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">上级功能ID</label>
+											<div class="col-sm-8">
+												<input type="text" class="form-control" id="parentId" name="parentId" placeholder="上级功能ID">
+											</div>
+											<label for="parentId" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label">备注</label>
+											<div class="col-sm-8">
+												<textarea class="form-control" rows="3" id="memo" name="memo" placeholder="备注"></textarea>
+											</div>
+											<label for="memo" class="col-sm-2 text-red"></label>
+										</div>
+										<div class="form-group">
+											<div class="col-sm-offset-2 col-sm-10">
+												<button id="btn_save" type="button" class="btn btn-default"><i class="fa fa-share"></i>提交</button>
+												<button id="btn_return" class="btn btn-default"><i class="fa fa-undo"></i>返回</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../plugins/validation/dist/jquery.validate.js"></script>
+<script src="../../plugins/validation/dist/locales/messages_zh.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../plugins/fastclick/fastclick.min.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<!--[if lt IE 9]>
+<script src="../../other/js/html5shiv.min.js"></script>
+<script src="../../other/js/respond.min.js"></script>
+<![endif]-->
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/My97DatePicker/WdatePicker.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script>
+	var pk = null;
+	var pkColumnName = null;
+	var values = null;
+	
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initUI();
+		initData();
+		initValidate();
+	}
+	
+	function initData() {
+		$.getUrlParam = function (name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) {
+				return unescape(r[2]);
+			}
+			return null;
+		};
+		var urltype = $.getUrlParam('id');
+		
+		pk = urltype;
+		pkColumnName = $.getUrlParam('key');
+		
+		if (isModify()) {
+			loadData(pkColumnName, pk);
+		} else {
+			getSelectOptionsFromDic('', '', 'menuType', 'sys_menu_type', true);
+		}
+	}
+	
+	function initUI() {
+		$('#btn_return').click(function () {
+			//$('#frameWin', window.parent.document).src = "SystemMenus.html";
+			window.location.href = "SystemMenus.html";
+		});
+		
+		$('#btn_save').click(function () {
+			doSave();
+		});
+	}
+	
+	function isModify() {
+		return (null != pk && "" != pk);
+	}
+	
+	function loadData(pkColumnName, pk) {
+		var query = {};
+		query.functionId = pk;
+		
+		Base.ajax({
+			url: serverSrc + "/systemMenus.do?_method=view",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(query)
+			},
+			mysuccess: function(val) {
+				if (JSON.stringify(val) == "{}") {
+					return;
+				}
+				setUIInfo(val);
+			}
+		});
+	}
+	
+	function setUIInfo(val) {
+		var data = val.row;
+		
+		$("#functionId").val(data.functionId).attr("disabled", true);
+		$("#name").val(data.name);
+		var selectedValuemenuType = data.menuType;
+		getSelectOptionsFromDic('', selectedValuemenuType, 'menuType', 'sys_menu_type');
+		$("#url").val(data.url);
+		$("#groupBy").val(data.groupBy);
+		$("#sortNum").val(data.sortNum);
+		$("#parentId").val(data.parentId);
+		$("#memo").val(data.memo);
+		$("#createTimeStr").val(data.createTimeStr);
+		$("#createUser").val(data.createUser);
+		$("#updateTimeStr").val(data.updateTimeStr);
+		$("#updateUser").val(data.updateUser);
+	}
+	
+	function doSave() {
+		if (!$("#form").valid()) {
+			return;
+		}
+		
+		if (!checkValid()) {
+			return;
+		}
+		
+		var addJson = {
+			"functionId": $("#functionId").val(),
+			"name": $("#name").val(),
+			"menuType": $("#menuType").val(),
+			"url": $("#url").val(),
+			"groupBy": $("#groupBy").val(),
+			"sortNum": $("#sortNum").val(),
+			"parentId": $("#parentId").val(),
+			"memo": $("#memo").val(),
+			"createTimeStr": $("#createTimeStr").val(),
+			"createUser": $("#createUser").val(),
+			"updateTimeStr": $("#updateTimeStr").val(),
+			"updateUser": $("#updateUser").val()
+		};
+		ajax(addJson);
+	}
+	
+	function ajax(obj) {
+		var url = serverSrc + "/systemMenus.do?_method=insert";
+		if (isModify()) {
+			url = serverSrc + "/systemMenus.do?_method=update";
+		}
+		var data = obj;
+		
+		Base.ajax({
+			url: url,
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(data)
+			},
+			mysuccess: function(data) {
+				var count = data.count;
+				if (count == 0) {
+					$.messager.alert("提示", data.message.message);
+				} else {
+					$.messager.alert("提示", getMessage("MSG_COMMON_I0005", "保存"));
+				}
+			}
+		});
+	}
+	
+	function checkValid() {
+//		var functionId = $("#functionId").val();
+//		if ("" == functionId.trim()) {
+//			$.messager.alert("提示", getMessage('MSG_COMMON_I0003', "功能ID"));
+//			return false;
+//		}
+		
+		return true;
+	}
+	
+	var validator;
+	function initValidate() {
+		validator = $("#form").validate({
+			debug: true,//不提交表单
+			rules: {
+				functionId: {
+					required: true,
+					maxlength: 45
+				},
+				name: {
+					maxlength: 45
+				},
+				menuType: {
+					maxlength: 45
+				},
+				url: {
+					maxlength: 512
+				},
+				parentId: {
+					maxlength: 45
+				},
+				memo: {
+					maxlength: 1024
+				},
+				createUser: {
+					maxlength: 45
+				},
+				updateUser: {
+					maxlength: 45
+				}
+			},
+			errorPlacement: function(error, element) {
+				// Append error within linked label
+				$(element).closest("form").find("label[for='" + element.attr("id") + "']").append(error);
+			},
+			errorElement: "span"
+		});
+	}
+</script>
+</html>

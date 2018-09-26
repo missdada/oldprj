@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+	<meta charset="UTF-8">
+	<title>权限设定</title>
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="../../bootstrap-table/bootstrap-table.css" />
+	<link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="../../plugins/ztree/zTreeStyle.css">
+	<style type="text/css">
+		td.alignRight {
+			text-align: right;
+		}
+		td.alignCenter {
+			text-align: center;
+		}
+		tr th {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>配置管理	<small>权限设定</small></h1>
+				<ol class="breadcrumb">
+					<li><a href="#"><i class="fa fa-home"></i>首页</a></li>
+					<li>配置管理</li>
+					<li class="active">权限设定</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="box box-info collapsed-box">
+							<div class="box-header with-border">
+								<h3 class="box-title">检索条件</h3>
+								<div class="box-tools pull-right">
+									<button class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+								</div>
+							</div>
+							<form class="form-horizontal">
+								<div class="box-body">
+									<div class="form-group">
+										<label for="appUid" class="col-sm-1 control-label">角色名：</label>
+										<div class="col-sm-4">
+											<select class="form-control select2" id="roles" name="roles" style="width: 100%;"></select>
+										</div>
+									</div>
+								</div>
+								<div class="box-footer">
+									<a class="btn btn-info" onclick="doSearch();">检索</a>
+								</div>
+							</form>
+						</div>
+						<div class="box">
+							<div class="box-body">
+								<table id="table" data-toggle="table"
+									data-click-to-select="true" data-side-pagination="server"
+									data-pagination="true" data-page-list="[10, 25, 50, 100, ALL]"
+									data-show-refresh="true"
+									data-response-handler="table_responseHandler">
+									<thead>
+										<tr>
+											<th data-field="uid" data-visible="false">角色id</th>
+											<th data-formatter="getindex">NO</th>
+											<th data-field="code">角色编码</th>
+											<th data-field="name">角色名称</th>
+											<th data-field="memo">备注</th>
+											<th data-field="createTimeStr" data-formatter="controlFormatter">操作</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="box box-info">
+							<div class="box-header with-border">
+								<h3 class="box-title" id="crrentMenuName">菜单权限</h3>
+								<div class="box-tools pull-right">
+									<a class="btn btn-primary btn-block btn-flat" href="javascript:void(0)" onclick="doSave()">保存</a>
+								</div>
+							</div>
+							<div class="box-body">
+								<input type="hidden" id="crrentRoleid" />
+								<ul class="ztree" id="menuTree"></ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../bootstrap-table/bootstrap-table.js"></script>
+<script src="../../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all-3.5.min.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<script>
+	$(function() {
+		init();
+	});
+	
+	function init() {
+		initData();
+		initUI();
+	}
+	
+	function initData() {
+		$.getUrlParam = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) {
+				return unescape(r[2]);
+			}
+			return null;
+		};
+		var roleuid = $.getUrlParam('roleuid');
+		if (roleuid != null) {
+			getSelectOptionsFromTable(roleuid, 'roles', 'system_roles', 'uid', 'name', true);
+			$('#roles').attr("disabled", true);
+		} else {
+			getSelectOptionsFromTable('', 'roles', 'system_roles', 'uid', 'name', true);
+		}
+	}
+	
+	function initUI() {
+		doSearch();
+	}
+	
+	function getSelectedItems() {
+		return $('#table').bootstrapTable('getSelections');
+	}
+	
+	function actionFormatter(value, row, index) {
+		return [ '<button class="btn btn-primary resend" style="margin:-10px 6px;">详细</button>' ].join('');
+	}
+	
+	window.actionEvents = {
+		'click .resend': function(e, value, row, index) {
+			alert('重新发送该, row: ' + JSON.stringify(row));
+		}
+	};
+	
+	function doSearch() {
+		var paras = {};
+		$.getUrlParam = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) {
+				return unescape(r[2]);
+			}
+			return null;
+		};
+		var roleuid = $.getUrlParam('roleuid');
+		if (roleuid != null) {
+			paras.uid = roleuid;
+		} else {
+			var selectedRoleid = $('#roles').find("option:selected").val();
+			paras.uid = selectedRoleid;
+		}
+		
+		Base.ajax({
+			url: serverSrc + "/systemRoles.do?_method=doSearch",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(paras)
+			},
+			mysuccess: function(data) {
+				$('#table').bootstrapTable('load', data);
+				$.fn.zTree.destroy("menuTree");
+			}
+		});
+	}
+	
+	function controlFormatter(value, row) {
+		if (row.code != 'admin') {
+			return '<a href="javascritp:void(0)" onclick="getTree(\'' + row.uid + '\',\'' + row.name + '\')">分配权限</a>';
+		}
+	}
+	
+	function getTree(roleid, rolename) {
+		$('#crrentRoleid').val(roleid);
+		$('#crrentMenuName').html('菜单权限 [' + rolename + "]");
+		var setting = {
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "function_id",
+					pIdKey: "parent_id"
+				},
+				key: {
+					checked: "checked",
+					name: "name"
+				}
+			},
+			check: {
+				enable: true,
+				chkStyle: "checkbox",
+				chkboxType: {
+					"Y": "ps",
+					"N": "ps"
+				}
+			}
+		};
+		
+		Base.ajax({
+			url: serverSrc + "/menu.do?_method=doSearchMenuTree",
+			type: 'post',
+			dataType: 'json',
+			mysuccess: function(data) {
+				var zNodes = data.menuArray;
+				
+				$.fn.zTree.init($("#menuTree"), setting, zNodes); //生成树形结构
+				
+				var treeObject = $.fn.zTree.getZTreeObj("menuTree"); //获取树对象
+				var query = {};
+				query.uid = roleid;
+				Base.ajax({
+					url: serverSrc + "/menu.do?_method=getRoleMenu",
+					type: "post",
+					dataType: "json",
+					data: {
+						_json: JSON.stringify(query)
+					},
+					mysuccess: function(menudata) {
+						var nodes = treeObject.transformToArray(treeObject.getNodes());
+						var list = menudata.menuArray;
+						
+						if (list != null && list.length > 0) {
+							for (var i = 0; i < list.length; i++) {
+								if (list[i].function_id.indexOf(':') < 0) {
+									var map = list[i];
+									var functionid = map.function_id;
+									
+									for (var j = 0; j < nodes.length; j++) {
+										if (functionid == nodes[j].function_id) {
+											treeObject.checkNode(nodes[j], true, false);
+											break;
+										}
+									}
+								}
+							}
+							treeObject.expandAll(true);
+						}
+					}
+				});
+			},
+			error: function(msg) {
+				alert("菜单加载异常");
+			}
+		});
+	}
+	
+	function doSave() {
+		var treeObject = $.fn.zTree.getZTreeObj("menuTree"); //获取树对象
+		var nodes = treeObject.getCheckedNodes();
+		var param = {};
+		var functionids = [];
+		var funj = 0
+		for (var i = 0; i < nodes.length; i++) {
+			if (nodes[i].url != '#' && nodes[i].url != '*') {
+				functionids[funj] = nodes[i].function_id;
+				funj = funj + 1;
+			}
+		}
+		param.uid = $('#crrentRoleid').val();
+		param.functionids = functionids;
+		Base.ajax({
+			url: serverSrc + "/menu.do?_method=updateRoleMenu",
+			type: 'post',
+			dataType: 'json',
+			data: {
+				_json: JSON.stringify(param)
+			},
+			mysuccess: function(resp) {
+				if (resp && resp.message) {
+					var msgInfo = resp.message;
+					if (msgInfo.messageId == 'I0003') {
+						$.messager.alert("提示", msgInfo.message);
+					}
+				}
+			}
+		});
+	}
+	
+	var tableindex = 0;
+	function getindex(value, row) {
+		return ++tableindex + row.offset;
+	}
+</script>
+</html>

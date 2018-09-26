@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.common.dao.entity.mapper.ISystemMonitorOperationMapper">
+	<resultMap id="SystemMonitorOperationEntityResult" type="manytag.common.dao.entity.SystemMonitorOperationEntity">
+		<result column="response_time" property="responseTime" jdbcType="INTEGER" />
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_code" property="userCode" jdbcType="VARCHAR" />
+		<result column="model_content" property="modelContent" jdbcType="VARCHAR" />
+		<result column="function_content" property="functionContent" jdbcType="VARCHAR" />
+		<result column="ip" property="ip" jdbcType="VARCHAR" />
+		<result column="operation_result" property="operationResult" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.common.dao.entity.SystemMonitorOperationSearchEntity" resultMap="SystemMonitorOperationEntityResult">
+		select
+			response_time,
+			id,
+			user_code,
+			model_content,
+			function_content,
+			ip,
+			operation_result,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_operation
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="searchAll" resultMap="SystemMonitorOperationEntityResult">
+		select
+			response_time,
+			id,
+			user_code,
+			model_content,
+			function_content,
+			ip,
+			operation_result,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_operation
+	</select>
+
+	<select id="search" parameterType="manytag.common.dao.entity.SystemMonitorOperationSearchEntity" resultMap="SystemMonitorOperationEntityResult">
+		select
+			response_time,
+			id,
+			user_code,
+			model_content,
+			function_content,
+			ip,
+			operation_result,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_operation
+		<trim prefix="where" prefixOverrides="and">
+			<if test="responseTimeSearchBegin != null">
+				and response_time &gt;= #{responseTimeSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="responseTimeSearchEnd != null">
+				and response_time &lt;= #{responseTimeSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				and user_code like CONCAT('%', #{userCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="modelContent != null and modelContent != ''">
+				and model_content like CONCAT('%', #{modelContent,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="functionContent != null and functionContent != ''">
+				and function_content like CONCAT('%', #{functionContent,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip like CONCAT('%', #{ip,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="operationResult != null and operationResult != ''">
+				and operation_result like CONCAT('%', #{operationResult,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.common.dao.entity.SystemMonitorOperationSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from system_monitor_operation
+		<trim prefix="where" prefixOverrides="and">
+			<if test="responseTimeSearchBegin != null">
+				and response_time &gt;= #{responseTimeSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="responseTimeSearchEnd != null">
+				and response_time &lt;= #{responseTimeSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchBegin != null">
+				and id &gt;= #{idSearchBegin,jdbcType=INTEGER}
+			</if>
+			<if test="idSearchEnd != null">
+				and id &lt;= #{idSearchEnd,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				and user_code like CONCAT('%', #{userCode,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="modelContent != null and modelContent != ''">
+				and model_content like CONCAT('%', #{modelContent,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="functionContent != null and functionContent != ''">
+				and function_content like CONCAT('%', #{functionContent,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip like CONCAT('%', #{ip,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="operationResult != null and operationResult != ''">
+				and operation_result like CONCAT('%', #{operationResult,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="SystemMonitorOperationEntityResult">
+		select
+			response_time,
+			id,
+			user_code,
+			model_content,
+			function_content,
+			ip,
+			operation_result,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_monitor_operation
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from system_monitor_operation
+	</select>
+
+	<delete id="delete" parameterType="manytag.common.dao.entity.SystemMonitorOperationEntity">
+		delete from system_monitor_operation
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from system_monitor_operation
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(id = #{entity.id,jdbcType=INTEGER})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.common.dao.entity.SystemMonitorOperationEntity">
+		delete from system_monitor_operation
+		<trim prefix="where" prefixOverrides="and">
+			<if test="responseTime != null">
+				and response_time = #{responseTime,jdbcType=INTEGER}
+			</if>
+			<if test="id != null">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				and user_code = #{userCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelContent != null and modelContent != ''">
+				and model_content = #{modelContent,jdbcType=VARCHAR}
+			</if>
+			<if test="functionContent != null and functionContent != ''">
+				and function_content = #{functionContent,jdbcType=VARCHAR}
+			</if>
+			<if test="ip != null and ip != ''">
+				and ip = #{ip,jdbcType=VARCHAR}
+			</if>
+			<if test="operationResult != null and operationResult != ''">
+				and operation_result = #{operationResult,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.common.dao.entity.SystemMonitorOperationEntity">
+		insert into system_monitor_operation
+		(
+			id
+			<if test="responseTime != null and responseTime != ''">
+			,response_time
+			</if>
+			<if test="userCode != null and userCode != ''">
+			,user_code
+			</if>
+			<if test="modelContent != null and modelContent != ''">
+			,model_content
+			</if>
+			<if test="functionContent != null and functionContent != ''">
+			,function_content
+			</if>
+			<if test="ip != null and ip != ''">
+			,ip
+			</if>
+			<if test="operationResult != null and operationResult != ''">
+			,operation_result
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{id,jdbcType=INTEGER}
+			<if test="responseTime != null and responseTime != ''">
+			,#{responseTime,jdbcType=INTEGER}
+			</if>
+			<if test="userCode != null and userCode != ''">
+			,#{userCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelContent != null and modelContent != ''">
+			,#{modelContent,jdbcType=VARCHAR}
+			</if>
+			<if test="functionContent != null and functionContent != ''">
+			,#{functionContent,jdbcType=VARCHAR}
+			</if>
+			<if test="ip != null and ip != ''">
+			,#{ip,jdbcType=VARCHAR}
+			</if>
+			<if test="operationResult != null and operationResult != ''">
+			,#{operationResult,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.common.dao.entity.SystemMonitorOperationEntity">
+		update system_monitor_operation
+		set
+			<if test="responseTime != null and responseTime != ''">
+			response_time = #{responseTime,jdbcType=INTEGER}
+			</if>
+			,id = #{id,jdbcType=INTEGER}
+			<if test="userCode != null and userCode != ''">
+			,user_code = #{userCode,jdbcType=VARCHAR}
+			</if>
+			<if test="modelContent != null and modelContent != ''">
+			,model_content = #{modelContent,jdbcType=VARCHAR}
+			</if>
+			<if test="functionContent != null and functionContent != ''">
+			,function_content = #{functionContent,jdbcType=VARCHAR}
+			</if>
+			<if test="ip != null and ip != ''">
+			,ip = #{ip,jdbcType=VARCHAR}
+			</if>
+			<if test="operationResult != null and operationResult != ''">
+			,operation_result = #{operationResult,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

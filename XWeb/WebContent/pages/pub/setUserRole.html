@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+	<meta charset="UTF-8">
+	<title>mytitle</title>
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="../../bootstrap-table/bootstrap-table.css" />
+	<link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<style type="text/css">
+		td.alignRight {
+			text-align: right;
+		}
+		td.alignCenter {
+			text-align: center;
+		}
+		tr th {
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>分配角色 </h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-home"></i>首页</a></li>
+					<li>系统管理</li>
+					<li class="active">用户管理</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box box-info">
+							<div class="box-header with-border">
+								<h3 class="box-title">检索条件</h3>
+								<div class="box-tools pull-right">
+									<button class="btn btn-box-tool" data-widget="collapse">
+										<i class="fa fa-plus"></i>
+									</button>
+								</div>
+							</div>
+							<form class="form-horizontal">
+								<div class="box-body">
+									<div class="form-group">
+										<label for="name" class="col-sm-1 control-label">用户名称：</label>
+										<div class="col-sm-2">
+											<select class="form-control" id="userid" name="userid" style="width: 100%;"></select>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-body">
+								<div id="transform-buttons" class="btn-group btn-default" style="position: absolute; top: 20px; left: 10px;">
+									<button class="btn btn-default" id="btn_modify">
+										<i class="fa fa-edit"></i><span data-zh="转换" data-es="Transformar">保存</span>
+									</button>
+								</div>
+								<table id="table" data-toggle="table"
+									data-click-to-select="true"
+									data-side-pagination="server"
+									data-pagination="true"
+									data-page-list="[10, 25, 50, 100, ALL]"
+									data-show-refresh="true"
+									data-response-handler="table_responseHandler">
+									<thead>
+										<tr>
+											<th data-field="state" data-checkbox="true"></th>
+											<th data-formatter="getindex">NO</th>
+											<th data-field="uid" data-visible="false">角色id</th>
+											<th data-field="code">角色编码</th>
+											<th data-field="name">角色名称</th>
+											<th data-field="memo">备注</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../bootstrap-table/bootstrap-table.js"></script>
+<script src="../../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<script>
+	var dataSrc = serverSrc + "/systemRoles.do?_method=doSearch";
+	$("#table").attr("data-url", dataSrc);
+	var pk=null;
+	
+	$(function () {
+		init();
+	});
+	
+	function init() {
+		initData();
+		initUI();
+	}
+	
+	function initData() {
+		$.getUrlParam = function(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) {
+				return unescape(r[2]);
+			}
+			return null;
+		};
+		if ($.getUrlParam('pk')) {
+			pk = $.getUrlParam('pk');
+			getSelectOptionsFromTable(pk, 'userid', 'system_users', 'code', 'name', false);
+			$('#userid').attr("disabled", true);
+		} else {
+			getSelectOptionsFromTable('', 'userid', 'system_users', 'code', 'name', false);
+		}
+	}
+	
+	function initUI() {
+		$('#table').on('load-success.bs.table', function (e, data) {
+			getSelectUserRole();
+		});
+		$('#btn_modify').click(function (){ doModify(getSelectedItems()); });
+		$('#userid').change(function() {
+			getSelectUserRole();
+		});
+	}
+	
+	function getSelectedItems() {
+		return $('#table').bootstrapTable('getSelections');
+	}
+	
+	window.actionEvents = {
+		'click .resend': function (e, value, row, index) {
+			alert('重新发送该, row: ' + JSON.stringify(row));
+		}
+	};
+	
+	function doModify() {
+		var selects = getSelectedItems();
+		var paras = {};
+		paras.userCode = $("#userid").val();
+		roles = [];
+		for (var i = 0; i < selects.length; i++) {
+			roles.push(selects[i].uid);
+		}
+		paras.roles = roles;
+		Base.ajax({
+			url: serverSrc + "/menu.do?_method=updateUserRole",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(paras)
+			},
+			mysuccess: function(data) {
+				alert('权限更新成功');
+			}
+		});
+	}
+	
+	function doSearch() {
+		var paras = {};
+		var code = $("#code").val();
+		if (code != '') {
+			paras.code = code;
+		}
+		var name = $("#name").val();
+		if (name != '') {
+			paras.name = name;
+		}
+		
+		Base.ajax({
+			url: serverSrc + "/systemRoles.do?_method=doSearch",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(paras)
+			},
+			mysuccess: function(data) {
+				$('#table').bootstrapTable('load', data);
+			}
+		});
+	}
+	
+	function getSelectUserRole(){
+		var paras = {};
+		paras.userCode = $.getUrlParam('pk');
+		
+		Base.ajax({
+			url: serverSrc + "/systemUserRole.do?_method=selectAccurate",
+			type: "post",
+			dataType: "json",
+			data: {
+				_json: JSON.stringify(paras)
+			},
+			mysuccess: function(data) {
+				if (data) {
+					$('#table').bootstrapTable('uncheckAll');
+					for (var i = 0; i < data.rows.length; i++) {
+						$('#table').bootstrapTable('checkBy', {field: 'uid', values: [data.rows[i].roleCode]});
+					}
+				}
+			}
+		});
+	}
+</script>
+</html>

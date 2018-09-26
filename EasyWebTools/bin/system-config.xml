@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system-config>
+	<root-path desc="所有代码输出的根路径">d:/src/</root-path>
+
+	<code-output-path desc="代码输出的相对路径">
+		<sql-path desc="sql文件输出的路径">/manytag/business/dao/sql</sql-path>
+		<html-path desc="html文件输出的路径">/webpage</html-path>
+		<menu-path desc="菜单脚本输出的路径">/menu</menu-path>
+		<ui-model-path desc="UI模型的输出路径。此配置输出的代码暂时不用。">/model</ui-model-path>
+	</code-output-path>
+
+	<package-name desc="包名称定义">
+		<entity-name desc="实体bean的包名">manytag.business.dao.entity</entity-name>
+		<dao-name desc="dao的包名">manytag.business.dao</dao-name>
+		<service-name desc="服务定义代码的包名">manytag.business.service</service-name>
+		<service-impl-name desc="服务实现代码的包名">manytag.business.service.impl</service-impl-name>
+		<action-name desc="业务服务action的包名">manytag.business.action</action-name>
+	</package-name>
+
+	<database>
+		<connection>
+			<ip>127.0.0.1</ip>
+			<port>3306</port>
+			<user-name>root</user-name>
+			<password>123456</password>
+			<schema desc="数据库名">swmp_scm_test3</schema>
+			
+			<!-- <ip>192.168.58.159</ip>
+			<port>3306</port>
+			<user-name>swmp_scm</user-name>
+			<password>swmp_scm</password>
+			<schema desc="数据库名">swmp_scm</schema> -->
+			
+			<!-- <user-name>test</user-name>
+			<password>test</password>
+			<schema desc="数据库名">test</schema> -->
+		</connection>
+		<!-- <table-pattern desc="代码生成基于的表名。%是通配符，代表所有表。">c_%</table-pattern> -->
+	 <table-pattern desc="代码生成基于的表名。%是通配符，代表所有表。">person</table-pattern> 
+	</database>
+</system-config>

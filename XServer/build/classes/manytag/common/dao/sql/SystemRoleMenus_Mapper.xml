@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.common.dao.entity.mapper.ISystemRoleMenusMapper">
+	<resultMap id="SystemRoleMenusEntityResult" type="manytag.common.dao.entity.SystemRoleMenusEntity">
+		<result column="uid" property="uid" jdbcType="VARCHAR" />
+		<result column="operation" property="operation" jdbcType="VARCHAR" />
+		<result column="menus_uid" property="menusUid" jdbcType="VARCHAR" />
+		<result column="role_uid" property="roleUid" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.common.dao.entity.SystemRoleMenusSearchEntity" resultMap="SystemRoleMenusEntityResult">
+		select
+			uid,
+			operation,
+			menus_uid,
+			role_uid,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_role_menus
+		where uid = #{uid,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchAll" resultMap="SystemRoleMenusEntityResult">
+		select
+			uid,
+			operation,
+			menus_uid,
+			role_uid,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_role_menus
+	</select>
+
+	<select id="search" parameterType="manytag.common.dao.entity.SystemRoleMenusSearchEntity" resultMap="SystemRoleMenusEntityResult">
+		select
+			uid,
+			operation,
+			menus_uid,
+			role_uid,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_role_menus
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="operation != null and operation != ''">
+				and operation like CONCAT('%', #{operation,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="menusUid != null and menusUid != ''">
+				and menus_uid like CONCAT('%', #{menusUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleUid != null and roleUid != ''">
+				and role_uid like CONCAT('%', #{roleUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.common.dao.entity.SystemRoleMenusSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from system_role_menus
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid like CONCAT('%', #{uid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="operation != null and operation != ''">
+				and operation like CONCAT('%', #{operation,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="menusUid != null and menusUid != ''">
+				and menus_uid like CONCAT('%', #{menusUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="roleUid != null and roleUid != ''">
+				and role_uid like CONCAT('%', #{roleUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="SystemRoleMenusEntityResult">
+		select
+			uid,
+			operation,
+			menus_uid,
+			role_uid,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_role_menus
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from system_role_menus
+	</select>
+
+	<delete id="delete" parameterType="manytag.common.dao.entity.SystemRoleMenusEntity">
+		delete from system_role_menus
+		where uid = #{uid,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from system_role_menus
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(uid = #{entity.uid,jdbcType=VARCHAR})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.common.dao.entity.SystemRoleMenusEntity">
+		delete from system_role_menus
+		<trim prefix="where" prefixOverrides="and">
+			<if test="uid != null and uid != ''">
+				and uid = #{uid,jdbcType=VARCHAR}
+			</if>
+			<if test="operation != null and operation != ''">
+				and operation = #{operation,jdbcType=VARCHAR}
+			</if>
+			<if test="menusUid != null and menusUid != ''">
+				and menus_uid = #{menusUid,jdbcType=VARCHAR}
+			</if>
+			<if test="roleUid != null and roleUid != ''">
+				and role_uid = #{roleUid,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.common.dao.entity.SystemRoleMenusEntity">
+		insert into system_role_menus
+		(
+			uid
+			<if test="operation != null and operation != ''">
+			,operation
+			</if>
+			<if test="menusUid != null and menusUid != ''">
+			,menus_uid
+			</if>
+			<if test="roleUid != null and roleUid != ''">
+			,role_uid
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{uid,jdbcType=VARCHAR}
+			<if test="operation != null and operation != ''">
+			,#{operation,jdbcType=VARCHAR}
+			</if>
+			<if test="menusUid != null and menusUid != ''">
+			,#{menusUid,jdbcType=VARCHAR}
+			</if>
+			<if test="roleUid != null and roleUid != ''">
+			,#{roleUid,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.common.dao.entity.SystemRoleMenusEntity">
+		update system_role_menus
+		set uid = #{uid,jdbcType=VARCHAR}
+			<if test="operation != null and operation != ''">
+			,operation = #{operation,jdbcType=VARCHAR}
+			</if>
+			<if test="menusUid != null and menusUid != ''">
+			,menus_uid = #{menusUid,jdbcType=VARCHAR}
+			</if>
+			<if test="roleUid != null and roleUid != ''">
+			,role_uid = #{roleUid,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where uid = #{uid,jdbcType=VARCHAR}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>

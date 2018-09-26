@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+	<meta charset="UTF-8">
+	<title>树形控件</title>
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="../../bootstrap-table/bootstrap-table.css" />
+	<link rel="stylesheet" href="../../font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../dist/css/AdminLTE.css">
+	<link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
+	<link rel="stylesheet" href="../../plugins/ztree/zTreeStyle.css">
+</head>
+<body>
+	<div class="wrapper">
+		<div>
+			<section class="content-header">
+				<h1>详细数据	<small>分类信息</small></h1>
+				<ol class="breadcrumb">
+					<li><a href="../../dashboard.html"><i class="fa fa-home"></i>首页</a></li>
+					<li><a href="#">详细数据</a></li>
+					<li class="active">分类信息</li>
+				</ol>
+			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-xs-3">
+						<div class="box box-danger">
+							<div class="box-header with-border">
+								<h3 class="box-title" id="crrentTreeName">分类信息</h3>
+							</div>
+							<div class="box-body">
+								<ul class="ztree" id="zTree"></ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-9">
+						<div class="box box-danger">
+							<div class="box-header with-border">
+								<h3 class="box-title">设置</h3>
+							</div>
+							<form class="form-horizontal">
+								<div class="box-body">
+									<div class="form-group ">
+										<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>编码</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="code" name="code" disabled="disabled" placeholder="编码">
+										</div>
+										<label for="code" class="col-sm-2 text-red"></label>
+									</div>
+									<div class="form-group ">
+										<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>名称</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="name" name="name" disabled="disabled" placeholder="名称">
+										</div>
+										<label for="name" class="col-sm-2 text-red"></label>
+									</div>
+									<div class="form-group ">
+										<label class="col-sm-2 control-label">父类型</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="parentCode" name="parentCode" disabled="disabled" placeholder="父类型">
+										</div>
+										<label for="parentCode" class="col-sm-2 text-red"></label>
+									</div>
+									<div class="form-group hide">
+										<label class="col-sm-2 control-label"><span class="text-red">*&nbsp;</span>顺序号</label>
+										<div class="col-sm-8">
+											<input type="text" class="form-control" id="sortNum" name="sortNum" disabled="disabled" placeholder="顺序号">
+										</div>
+										<label for="sortNum" class="col-sm-2 text-red"></label>
+									</div>
+									<div class="form-group ">
+										<label class="col-sm-2 control-label">备注</label>
+										<div class="col-sm-8">
+											<textarea class="form-control" rows="3" id="memo" name="memo" disabled="disabled" placeholder="备注"></textarea>
+										</div>
+										<label for="memo" class="col-sm-2 text-red"></label>
+									</div>
+									<input type="hidden" class="form-control" id="node_tid" placeholder="列tid" disabled>
+								</div>
+								<div class="box-footer">
+									<div class="box-tools col-sm-offset-2">
+										<a class="btn btn-default" href="javascript:void(0)" onclick="editTreeNode()"><i class="fa fa-edit"></i>编辑</a>
+										<a class="btn btn-default" href="javascript:void(0)" onclick="addNode()"><i class="fa fa-file-o"></i>添加</a>
+										<a class="btn btn-danger" href="javascript:void(0)" onclick="removeNode()"><i class="fa fa-trash"></i>删除</a>
+											&nbsp;|&nbsp;
+										<a class="btn btn-default" href="javascript:void(0)" onclick="save()"><i class="fa fa-save"></i>保存</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript" src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+<script src="../../bootstrap-table/bootstrap-table.js"></script>
+<script src="../../bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="../../plugins/jQuery/jquery.bootstrap.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all-3.5.min.js"></script>
+<script src="../../dist/js/command.js"></script>
+<script src="../../dist/js/message.js"></script>
+<script src="../../dist/js/app.min.js"></script>
+<script>
+	$(function() {
+		init();
+	});
+	
+	function init() {
+		initData();
+		initUI();
+	}
+	
+	function initData() {
+		getTree();
+	}
+	
+	function initUI() {
+	}
+	
+	window.actionEvents = {
+		'click .resend': function(e, value, row, index) {
+			alert('重新发送该, row: ' + JSON.stringify(row));
+			//console.log(value, row, index);
+		}
+	};
+	
+	function getTree() {
+		var setting = {
+			edit: {
+				enable: true,
+				showRemoveBtn: false,
+				showRenameBtn: false
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "code",
+					pIdKey: "parentCode"
+				},
+				key: {
+					checked: "checked",
+					name: "name"
+				}
+			},
+			callback: {
+				onClick: zTreeOnClick,
+				beforeDrag: beforeDrag,
+				beforeDrop: beforeDrop,
+				onDrop: zTreeOnDrop
+			}
+		};
+		
+		Base.ajax({
+			url: "/XServer/cTypeInfo.do?_method=doSearch",
+			type: 'post',
+			dataType: 'json',
+			mysuccess: function(data) {
+//				console.log(data);
+				var zNodes = data.rows;
+				var treeObject = $.fn.zTree.init($("#zTree"), setting, zNodes); //生成树形结构
+				treeObject.expandAll(true);
+			},
+			error: function(msg) {
+				alert("加载异常");
+			}
+		});
+	}
+	
+	function editTreeNode() {
+		$('#code').removeAttr('disabled');
+		$('#name').removeAttr('disabled');
+		$('#sortNum').removeAttr('disabled');
+		$('#memo').removeAttr('disabled');
+		$('#createTime').removeAttr('disabled');
+		$('#createUser').removeAttr('disabled');
+		$('#updateTime').removeAttr('disabled');
+		$('#updateUser').removeAttr('disabled');
+	}
+	
+	function disableTreeNode() {
+		$('#code').attr({disabled:'disabled'});
+		$('#name').attr({disabled:'disabled'});
+		$('#sortNum').attr({disabled:'disabled'});
+		$('#memo').attr({disabled:'disabled'});
+		$('#createTime').attr({disabled:'disabled'});
+		$('#createUser').attr({disabled:'disabled'});
+		$('#updateTime').attr({disabled:'disabled'});
+		$('#updateUser').attr({disabled:'disabled'});
+	}
+	
+	function zTreeOnDrop(event, treeId, treeNodes, targetNode, moveType) {
+		doSave();
+	}
+	
+	function beforeDrag(treeId, treeNodes) {
+		return true;
+	}
+	
+	function beforeDrop(treeId, treeNodes, targetNode, moveType) {
+		return true;
+	}
+	
+	function zTreeOnClick(event, treeId, treeNode) {
+		disableTreeNode();
+//		console.log(treeNode);
+		var treeObject = $.fn.zTree.getZTreeObj("zTree");
+		var tId = treeNode.parentTId;
+		var node_parent = "";
+		if (treeObject.getNodeByTId(tId)) {
+			node_parent = treeObject.getNodeByTId(tId).name;
+		}
+		
+		$('#node_tid').val(treeNode.tId);
+		
+		var data = treeNode;
+		$("#code").val(data.code);
+		$("#name").val(data.name);
+		$("#parentCode").val(node_parent);
+		$("#sortNum").val(data.sortNum);
+		$("#memo").val(data.memo);
+		$("#createTimeStr").val(data.createTimeStr);
+		$("#createUser").val(data.createUser);
+		$("#updateTimeStr").val(data.updateTimeStr);
+		$("#updateUser").val(data.updateUser);
+	};
+	
+	function setNode() {
+		var node_tid = $('#node_tid').val();
+		var treeObject = $.fn.zTree.getZTreeObj("zTree");
+		var node = treeObject.getNodeByTId(node_tid);
+		if (node) {
+			node.code = $("#code").val();
+			node.name = $("#name").val();
+			node.sortNum = $("#sortNum").val();
+			node.memo = $("#memo").val();
+			node.createTimeStr = $("#createTimeStr").val();
+			node.createUser = $("#createUser").val();
+			node.updateTimeStr = $("#updateTimeStr").val();
+			node.updateUser = $("#updateUser").val();
+		}
+		treeObject.updateNode(node);
+	}
+	
+	function addNode() {
+		var treeObject = $.fn.zTree.getZTreeObj("zTree");
+		var parentNode = treeObject.getSelectedNodes();
+//		if (parentNode.length == 0) {
+//			alert('请选择一个节点');
+//			return;
+//		}
+		var pnode = parentNode[0];
+		if (pnode) {
+			var cnode = {code:pnode.code+"_1", parentCode:pnode.code, name:"new node"}
+			treeObject.addNodes(pnode, cnode);
+		} else {
+			var cnode = {code:"root_1", parentCode:'*', name:"new node"}
+			treeObject.addNodes(pnode, cnode);
+		}
+	}
+	
+	function removeNode() {
+		var treeObject = $.fn.zTree.getZTreeObj("zTree");
+		var parentNode = treeObject.getSelectedNodes();
+		if (parentNode.length == 0) {
+			alert('请选择一个节点');
+			return;
+		}
+		var pnode = parentNode[0];
+		if (pnode) {
+			if (confirm("确定要删除此项吗？")) {
+				treeObject.removeNode(pnode);
+				doSave();
+			}
+		}
+	}
+	
+	function save() {
+		setNode();
+		doSave();
+	}
+	
+	var savedNode = [];
+	var nodesort = 0;
+	function doSave() {
+		var treeObject = $.fn.zTree.getZTreeObj("zTree");
+		var nodes = treeObject.getNodes();
+		if (nodes) {
+			savedNode = [];
+			nodesort = 0;
+			for (var i = 0; i < nodes.length; i++) {
+				var node = nodes[i];
+				saveThisNode(node);
+			}
+			//console.log(savedNode);
+			
+			var param = {};
+			param.treedata = savedNode;
+			Base.ajax({
+				url: "/XServer/cTypeInfo.do?_method=saveTree",
+				type: 'post',
+				dataType: 'json',
+				data: {
+					_json: JSON.stringify(param)
+				},
+				mysuccess: function(resp) {
+					if (resp && resp.message) {
+						var msgInfo = resp.message;
+						//console.log(msgInfo);
+						if (msgInfo.messageId == 'I0003') {
+//							$.messager.alert("提示", msgInfo.message);
+							window.location.href = "CTypeInfo.html";
+							getTree();
+						} else {
+							$.messager.alert("提示", msgInfo.message);
+						}
+					}
+				}
+			});
+		}
+	}
+	
+	function saveThisNode(tnode) {
+		if (tnode) {
+			var sm = {};
+			
+			sm.code = tnode.code;
+			sm.name = tnode.name;
+			sm.parentCode = tnode.parentCode;
+			sm.sortNum = nodesort;
+			sm.memo = tnode.memo;
+			sm.createTime = tnode.createTime;
+			sm.createUser = tnode.createUser;
+			sm.updateTime = tnode.updateTime;
+			sm.updateUser = tnode.updateUser;
+			
+			nodesort += 1;
+			savedNode.push(sm);
+			if (tnode.children) {
+				for (var y = 0; y < tnode.children.length; y++) {
+					saveThisNode(tnode.children[y]);
+				}
+			}
+		}
+	}
+</script>
+</html>

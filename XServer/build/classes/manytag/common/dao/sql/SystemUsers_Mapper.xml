@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manytag.common.dao.entity.mapper.ISystemUsersMapper">
+	<resultMap id="SystemUsersEntityResult" type="manytag.common.dao.entity.SystemUsersEntity">
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="department" property="department" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="qq" property="qq" jdbcType="VARCHAR" />
+		<result column="weixin" property="weixin" jdbcType="VARCHAR" />
+		<result column="user_uid" property="userUid" jdbcType="VARCHAR" />
+		<result column="valid_status" property="validStatus" jdbcType="VARCHAR" />
+		<result column="memo" property="memo" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="create_user" property="createUser" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="update_user" property="updateUser" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="searchPK" parameterType="manytag.common.dao.entity.SystemUsersSearchEntity" resultMap="SystemUsersEntityResult">
+		select
+			code,
+			password,
+			name,
+			nick_name,
+			department,
+			phone,
+			email,
+			qq,
+			weixin,
+			user_uid,
+			valid_status,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_users
+		where code = #{code,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchAll" resultMap="SystemUsersEntityResult">
+		select 
+			code,
+			password,
+			name,
+			nick_name,
+			department,
+			phone,
+			email,
+			qq,
+			weixin,
+			user_uid,
+			valid_status,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_users
+	</select>
+
+	<select id="search" parameterType="manytag.common.dao.entity.SystemUsersSearchEntity" resultMap="SystemUsersEntityResult">
+		select
+			code,
+			password,
+			name,
+			nick_name,
+			department,
+			phone,
+			email,
+			qq,
+			weixin,
+			user_uid,
+			valid_status,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_users
+		<trim prefix="where" prefixOverrides="and">
+			<if test="code != null and code != ''">
+				and code like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="password != null and password != ''">
+				and password like CONCAT('%', #{password,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="nickName != null and nickName != ''">
+				and nick_name like CONCAT('%', #{nickName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="department != null and department != ''">
+				and department like CONCAT('%', #{department,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone like CONCAT('%', #{phone,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="email != null and email != ''">
+				and email like CONCAT('%', #{email,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="qq != null and qq != ''">
+				and qq like CONCAT('%', #{qq,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="weixin != null and weixin != ''">
+				and weixin like CONCAT('%', #{weixin,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="userUid != null and userUid != ''">
+				and user_uid like CONCAT('%', #{userUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="validStatus != null and validStatus != ''">
+				and valid_status like CONCAT('%', #{validStatus,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+		order by update_time desc
+		limit #{offset},#{rows}
+	</select>
+
+	<select id="searchCount" parameterType="manytag.common.dao.entity.SystemUsersSearchEntity" resultType="java.lang.Integer">
+		select count(1)
+		from system_users
+		<trim prefix="where" prefixOverrides="and">
+			<if test="code != null and code != ''">
+				and code like CONCAT('%', #{code,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="password != null and password != ''">
+				and password like CONCAT('%', #{password,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="name != null and name != ''">
+				and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="nickName != null and nickName != ''">
+				and nick_name like CONCAT('%', #{nickName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="department != null and department != ''">
+				and department like CONCAT('%', #{department,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone like CONCAT('%', #{phone,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="email != null and email != ''">
+				and email like CONCAT('%', #{email,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="qq != null and qq != ''">
+				and qq like CONCAT('%', #{qq,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="weixin != null and weixin != ''">
+				and weixin like CONCAT('%', #{weixin,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="userUid != null and userUid != ''">
+				and user_uid like CONCAT('%', #{userUid,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="validStatus != null and validStatus != ''">
+				and valid_status like CONCAT('%', #{validStatus,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo like CONCAT('%', #{memo,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeSearchBegin != null">
+				and create_time &gt;= #{createTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createTimeSearchEnd != null">
+				and create_time &lt;= #{createTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user like CONCAT('%', #{createUser,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="updateTimeSearchBegin != null">
+				and update_time &gt;= #{updateTimeSearchBegin,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTimeSearchEnd != null">
+				and update_time &lt;= #{updateTimeSearchEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user like CONCAT('%', #{updateUser,jdbcType=VARCHAR}, '%')
+			</if>
+		</trim>
+	</select>
+
+	<select id="searchByCustom" parameterType="java.lang.String" resultMap="SystemUsersEntityResult">
+		select
+			code,
+			password,
+			name,
+			nick_name,
+			department,
+			phone,
+			email,
+			qq,
+			weixin,
+			user_uid,
+			valid_status,
+			memo,
+			create_time,
+			create_user,
+			update_time,
+			update_user
+		from system_users
+		<if test="value != null and value != ''">
+			where ${value}
+		</if>
+	</select>
+
+	<select id="getAllCount" resultType="java.lang.Integer">
+		select count(1) from system_users
+	</select>
+
+	<delete id="delete" parameterType="manytag.common.dao.entity.SystemUsersEntity">
+		delete from system_users
+		where code = #{code,jdbcType=VARCHAR}
+	</delete>
+
+	<delete id="deleteList" parameterType="java.util.List">
+		delete from system_users
+		where
+			<foreach collection="list" item="entity" index="index" open="(" separator=" or " close=")">
+				(code = #{entity.code,jdbcType=VARCHAR})
+			</foreach>
+	</delete>
+
+	<delete id="deleteAll" parameterType="manytag.common.dao.entity.SystemUsersEntity">
+		delete from system_users
+		<trim prefix="where" prefixOverrides="and">
+			<if test="code != null and code != ''">
+				and code = #{code,jdbcType=VARCHAR}
+			</if>
+			<if test="password != null and password != ''">
+				and password = #{password,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="nickName != null and nickName != ''">
+				and nick_name = #{nickName,jdbcType=VARCHAR}
+			</if>
+			<if test="department != null and department != ''">
+				and department = #{department,jdbcType=VARCHAR}
+			</if>
+			<if test="phone != null and phone != ''">
+				and phone = #{phone,jdbcType=VARCHAR}
+			</if>
+			<if test="email != null and email != ''">
+				and email = #{email,jdbcType=VARCHAR}
+			</if>
+			<if test="qq != null and qq != ''">
+				and qq = #{qq,jdbcType=VARCHAR}
+			</if>
+			<if test="weixin != null and weixin != ''">
+				and weixin = #{weixin,jdbcType=VARCHAR}
+			</if>
+			<if test="userUid != null and userUid != ''">
+				and user_uid = #{userUid,jdbcType=VARCHAR}
+			</if>
+			<if test="validStatus != null and validStatus != ''">
+				and valid_status = #{validStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+				and memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+				and create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+				and update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</delete>
+
+	<insert id="insert" parameterType="manytag.common.dao.entity.SystemUsersEntity">
+		insert into system_users
+		(
+			code
+			<if test="password != null and password != ''">
+			,password
+			</if>
+			,name
+			,nick_name
+			<if test="department != null and department != ''">
+			,department
+			</if>
+			<if test="phone != null and phone != ''">
+			,phone
+			</if>
+			<if test="email != null and email != ''">
+			,email
+			</if>
+			<if test="qq != null and qq != ''">
+			,qq
+			</if>
+			<if test="weixin != null and weixin != ''">
+			,weixin
+			</if>
+			<if test="userUid != null and userUid != ''">
+			,user_uid
+			</if>
+			<if test="validStatus != null and validStatus != ''">
+			,valid_status
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo
+			</if>
+			<if test="createTime != null">
+			,create_time
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user
+			</if>
+			<if test="updateTime != null">
+			,update_time
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user
+			</if>
+		)
+		values
+		(
+			#{code,jdbcType=VARCHAR}
+			<if test="password != null and password != ''">
+			,#{password,jdbcType=VARCHAR}
+			</if>
+			,#{name,jdbcType=VARCHAR}
+			,#{nickName,jdbcType=VARCHAR}
+			<if test="department != null and department != ''">
+			,#{department,jdbcType=VARCHAR}
+			</if>
+			<if test="phone != null and phone != ''">
+			,#{phone,jdbcType=VARCHAR}
+			</if>
+			<if test="email != null and email != ''">
+			,#{email,jdbcType=VARCHAR}
+			</if>
+			<if test="qq != null and qq != ''">
+			,#{qq,jdbcType=VARCHAR}
+			</if>
+			<if test="weixin != null and weixin != ''">
+			,#{weixin,jdbcType=VARCHAR}
+			</if>
+			<if test="userUid != null and userUid != ''">
+			,#{userUid,jdbcType=VARCHAR}
+			</if>
+			<if test="validStatus != null and validStatus != ''">
+			,#{validStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,#{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,#{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,#{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,#{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,#{updateUser,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="update" parameterType="manytag.common.dao.entity.SystemUsersEntity">
+		update system_users set
+			code = #{code,jdbcType=VARCHAR}
+			<if test="password != null and password != ''">
+			,password = #{password,jdbcType=VARCHAR}
+			</if>
+			,name = #{name,jdbcType=VARCHAR}
+			,nick_name = #{nickName,jdbcType=VARCHAR}
+			<if test="department != null and department != ''">
+			,department = #{department,jdbcType=VARCHAR}
+			</if>
+			<if test="phone != null and phone != ''">
+			,phone = #{phone,jdbcType=VARCHAR}
+			</if>
+			<if test="email != null and email != ''">
+			,email = #{email,jdbcType=VARCHAR}
+			</if>
+			<if test="qq != null and qq != ''">
+			,qq = #{qq,jdbcType=VARCHAR}
+			</if>
+			<if test="weixin != null and weixin != ''">
+			,weixin = #{weixin,jdbcType=VARCHAR}
+			</if>
+			<if test="userUid != null and userUid != ''">
+			,user_uid = #{userUid,jdbcType=VARCHAR}
+			</if>
+			<if test="validStatus != null and validStatus != ''">
+			,valid_status = #{validStatus,jdbcType=VARCHAR}
+			</if>
+			<if test="memo != null and memo != ''">
+			,memo = #{memo,jdbcType=VARCHAR}
+			</if>
+			<if test="createTime != null">
+			,create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createUser != null and createUser != ''">
+			,create_user = #{createUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updateTime != null">
+			,update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateUser != null and updateUser != ''">
+			,update_user = #{updateUser,jdbcType=VARCHAR}
+			</if>
+		where code = #{code,jdbcType=VARCHAR}
+	</update>
+
+	<select id="searchSql" parameterType="java.lang.String" resultType="java.util.Map">
+		${value}
+	</select>
+	<delete id="deleteSql" parameterType="java.lang.String">
+		${value}
+	</delete>
+	<insert id="insertSql" parameterType="java.lang.String">
+		${value}
+	</insert>
+	<update id="updateSql" parameterType="java.lang.String">
+		${value}
+	</update>
+</mapper>
